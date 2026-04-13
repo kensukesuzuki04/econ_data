@@ -86,11 +86,11 @@
       border: 1px solid #e0e0e0;
       border-radius: 6px;
       padding: 1.1rem 1.2rem;
-      text-decoration: none;
       color: inherit;
       transition: box-shadow 0.15s, border-color 0.15s;
       display: block;
       position: relative;
+      cursor: pointer;
     }
     .chart-card:hover {
       border-color: #8b0000;
@@ -132,6 +132,13 @@
       padding: 0.05rem 0.3rem;
       border-radius: 2px;
     }
+    .chart-card .src a {
+      color: #1f77b4;
+      text-decoration: none;
+    }
+    .chart-card .src a:hover {
+      text-decoration: underline;
+    }
 
     .empty {
       font-size: 0.88rem;
@@ -172,7 +179,7 @@
     </div>
     <div class="chart-grid">
 
-      <a class="chart-card" href="econ10/chart_inflation.html">
+      <div class="chart-card" onclick="window.location='econ10/chart_inflation.html'">
         <h3>Inflation Rate</h3>
         <p class="desc">Annual CPI inflation for 175 countries, 1960&ndash;2024. Toggle countries, hover for values.</p>
         <div class="tags">
@@ -182,9 +189,9 @@
         <div class="src">
           <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG" target="_blank" onclick="event.stopPropagation()"><code>FP.CPI.TOTL.ZG</code></a> &mdash; Inflation, consumer prices (annual&nbsp;%)
         </div>
-      </a>
+      </div>
 
-      <a class="chart-card" href="econ10/chart_unemployment.html">
+      <div class="chart-card" onclick="window.location='econ10/chart_unemployment.html'">
         <h3>Unemployment Rate</h3>
         <p class="desc">ILO-modeled unemployment for 141 countries, 1991&ndash;2024. Toggle countries, hover for values.</p>
         <div class="tags">
@@ -194,9 +201,9 @@
         <div class="src">
           <a href="https://data.worldbank.org/indicator/SL.UEM.TOTL.ZS" target="_blank" onclick="event.stopPropagation()"><code>SL.UEM.TOTL.ZS</code></a> &mdash; Unemployment, total (% of labor force, ILO estimate)
         </div>
-      </a>
+      </div>
 
-      <a class="chart-card" href="econ10/chart_phillips_wb.html">
+      <div class="chart-card" onclick="window.location='econ10/chart_phillips_wb.html'">
         <h3>Phillips Curve &mdash; World Bank</h3>
         <p class="desc">Phillips curve scatter for 175 countries, 1991&ndash;2024. Filter by country and year; 2nd-degree polynomial trend.</p>
         <div class="tags">
@@ -207,9 +214,9 @@
           <a href="https://data.worldbank.org/indicator/SL.UEM.TOTL.ZS" target="_blank" onclick="event.stopPropagation()"><code>SL.UEM.TOTL.ZS</code></a> &times;
           <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG" target="_blank" onclick="event.stopPropagation()"><code>FP.CPI.TOTL.ZG</code></a>
         </div>
-      </a>
+      </div>
 
-      <a class="chart-card" href="econ10/chart_phillips_us.html">
+      <div class="chart-card" onclick="window.location='econ10/chart_phillips_us.html'">
         <h3>Phillips Curve &mdash; United States</h3>
         <p class="desc">US Phillips curve, 1948&ndash;present, colored by decade. Uses FRED unemployment and CPI data for longer historical coverage.</p>
         <div class="tags">
@@ -220,9 +227,9 @@
           <a href="https://fred.stlouisfed.org/series/UNRATE" target="_blank" onclick="event.stopPropagation()"><code>UNRATE</code></a> &times;
           <a href="https://fred.stlouisfed.org/series/CPIAUCSL" target="_blank" onclick="event.stopPropagation()"><code>CPIAUCSL</code></a> &mdash; Federal Reserve Bank of St.&nbsp;Louis
         </div>
-      </a>
+      </div>
 
-      <a class="chart-card" href="econ10/chart_phillips_oecd.html">
+      <div class="chart-card" onclick="window.location='econ10/chart_phillips_oecd.html'">
         <h3>Phillips Curve &mdash; OECD</h3>
         <p class="desc">Phillips curve for 32 OECD members, 1960&ndash;2024. Uses OECD harmonized unemployment rates for cross-country comparability.</p>
         <div class="tags">
@@ -233,7 +240,7 @@
           <a href="https://fred.stlouisfed.org/series/LRHUTTTTUSM156S" target="_blank" onclick="event.stopPropagation()"><code>LRHUTTTT{ISO2}M156S</code></a> (FRED/OECD) &times;
           <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG" target="_blank" onclick="event.stopPropagation()"><code>FP.CPI.TOTL.ZG</code></a>
         </div>
-      </a>
+      </div>
 
     </div>
   </div>
