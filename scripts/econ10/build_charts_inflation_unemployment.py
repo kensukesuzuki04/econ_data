@@ -59,6 +59,9 @@ DECADE_COLORS = {
     "2000s": "#8c564b", "2010s": "#17becf", "2020s": "#e377c2",
 }
 
+# Single color used for US-only scatter plots (no decade coloring)
+SINGLE_COLOR = "#1f77b4"
+
 # -- Helpers ------------------------------------------------------------------
 def hex_to_rgba(hex_color: str, alpha: float = 0.35) -> str:
     h = hex_color.lstrip("#")
@@ -445,11 +448,11 @@ _PJS = [
     "var y0=parseInt(document.getElementById('yrMin').value);",
     "var y1=parseInt(document.getElementById('yrMax').value);",
     "if(y0>y1){alert('Min year must be <= max year.');return;}",
-    "var upd={x:[],y:[],text:[]},axv=[],ayv=[];",
+    "var upd={x:[],y:[],text:[],customdata:[]},axv=[],ayv=[];",
     "TRACE_NAMES.forEach(function(nm,i){",
-    "var d=ALL_DATA[nm],xs=[],ys=[],ts=[];",
-    "d.years.forEach(function(yr,j){if(yr>=y0&&yr<=y1){xs.push(d.x[j]);ys.push(d.y[j]);ts.push(d.text[j]);}});",
-    "upd.x.push(xs);upd.y.push(ys);upd.text.push(ts);",
+    "var d=ALL_DATA[nm],xs=[],ys=[],ts=[],hs=[];",
+    "d.years.forEach(function(yr,j){if(yr>=y0&&yr<=y1){xs.push(d.x[j]);ys.push(d.y[j]);ts.push(d.text[j]);hs.push(d.hoverText?d.hoverText[j]:d.text[j]);}});",
+    "upd.x.push(xs);upd.y.push(ys);upd.text.push(ts);upd.customdata.push(hs);",
     "var cb=document.querySelector('.ccb[value=\"'+nm+'\"]');",
     "if(cb&&cb.checked){axv=axv.concat(xs);ayv=ayv.concat(ys);}});",
     "Plotly.restyle('chart',upd,TRACE_NAMES.map(function(_,i){return i;}));",
@@ -524,7 +527,8 @@ def _build_phillips_multi(merged, title, subtitle, html_name,
         texts = [f"<b>{country}</b><br>Year: {yr}<br>"
                  f"Unemployment: {u:.1f}%<br>Inflation: {v:.1f}%"
                  for yr, u, v in zip(years, xs, ys)]
-        all_data[country] = {"x": xs, "y": ys, "years": years, "text": texts}
+        all_data[country] = {"x": xs, "y": ys, "years": years,
+                             "text": [str(yr) for yr in years], "hoverText": texts}
         fig.add_trace(go.Scatter(
             x=xs, y=ys, name=country, mode="markers",
             text=[str(yr) for yr in years],
@@ -643,8 +647,9 @@ def build_phillips_us_chart():
         texts = [f"<b>United States, {yr}</b><br>"
                  f"Unemployment: {u:.1f}%<br>Inflation: {v:.1f}%"
                  for yr, u, v in zip(years, xs, ys)]
-        all_data[decade] = {"x": xs, "y": ys, "years": years, "text": texts}
-        color = DECADE_COLORS.get(decade, "#888")
+        all_data[decade] = {"x": xs, "y": ys, "years": years,
+                            "text": [str(yr) for yr in years], "hoverText": texts}
+        color = SINGLE_COLOR
         fig.add_trace(go.Scatter(
             x=xs, y=ys, name=decade, mode="markers",
             text=[str(yr) for yr in years],
@@ -661,7 +666,7 @@ def build_phillips_us_chart():
     for i, decade in enumerate(plotted):
         d = all_data[decade]
         line_idxs[decade] = len(plotted) + i
-        color = DECADE_COLORS.get(decade, "#888")
+        color = SINGLE_COLOR
         fig.add_trace(go.Scatter(
             x=d["x"], y=d["y"], name=decade,
             mode="lines",
@@ -697,8 +702,7 @@ def build_phillips_us_chart():
     decade_cbs = "\n".join(
         f'      <div class="cb-wrap" data-name="{d.lower()}">'
         f'<input type="checkbox" class="ccb" id="cb_{d}" value="{d}" checked>'
-        f'<label for="cb_{d}" style="color:{DECADE_COLORS.get(d,"#888")};'
-        f'font-weight:600">{d}</label></div>'
+        f'<label for="cb_{d}">{d}</label></div>'
         for d in plotted
     )
     fname    = "chart_phillips_us"
@@ -770,8 +774,9 @@ def build_phillips_us_historical_chart():
             + ("&nbsp;&nbsp;<i>(est.)</i>" if e == "estimate" else "")
             for yr, u, v, e in zip(years, xs, ys, eras)
         ]
-        all_data[decade] = {"x": xs, "y": ys, "years": years, "text": texts}
-        color  = DECADE_COLORS.get(decade, "#888")
+        all_data[decade] = {"x": xs, "y": ys, "years": years,
+                            "text": [str(yr) for yr in years], "hoverText": texts}
+        color  = SINGLE_COLOR
         # open markers for estimates, filled for official
         is_est = all(e == "estimate" for e in eras)
         symbol = "circle-open" if is_est else "circle"
@@ -792,7 +797,7 @@ def build_phillips_us_historical_chart():
     for i, decade in enumerate(plotted):
         d = all_data[decade]
         line_idxs[decade] = len(plotted) + i
-        color = DECADE_COLORS.get(decade, "#888")
+        color = SINGLE_COLOR
         fig.add_trace(go.Scatter(
             x=d["x"], y=d["y"], name=decade,
             mode="lines",
@@ -830,7 +835,7 @@ def build_phillips_us_historical_chart():
     decade_cbs = "\n".join(
         f'      <div class="cb-wrap" data-name="{d.lower()}">'
         f'<input type="checkbox" class="ccb" id="cb_{d}" value="{d}" checked>'
-        f'<label for="cb_{d}" style="color:{DECADE_COLORS.get(d,"#888")};font-weight:600">'
+        f'<label for="cb_{d}">'
         f'{d}{"&nbsp;<em style=\'font-weight:400;font-size:.7rem\'>(est.)</em>" if d in PRE1948 else ""}'
         f'</label></div>'
         for d in plotted

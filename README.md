@@ -13,8 +13,8 @@ Charts are self-contained HTML files built with Python and Plotly — open in an
 
 | Course | Title | Level | Visualizations |
 |--------|-------|-------|----------------|
-| [ECON 10](docs/econ10/) | Introductory Economics | Undergraduate | Inflation, Unemployment, 3× Phillips Curve |
-| [ECON 206](docs/econ206/) | Intermediate Macroeconomics | Undergraduate | *(coming soon)* |
+| [ECON 10](docs/econ10/) | Economics and the World Economy | Undergraduate | Inflation, Unemployment, 3× Phillips Curve |
+| [ECON 206](docs/econ206/) | Macroeconomic Theory | Undergraduate | *(coming soon)* |
 
 ---
 
