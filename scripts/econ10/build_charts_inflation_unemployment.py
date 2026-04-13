@@ -866,6 +866,220 @@ def build_phillips_us_historical_chart():
     print(f"  Saved -> {(DOCS_DIR / 'chart_phillips_us_historical.html').relative_to(REPO_ROOT)}")
 
 
+# -- 5/6. US historical line charts: unemployment & inflation, 1890+ ----------
+def build_us_historical_line_chart(series: str, y_label: str, fname: str,
+                                   title: str, subtitle: str,
+                                   hover_est: str, hover_off: str,
+                                   footer_source: str, source_html: str):
+    """Generic builder for a single-series US historical line chart.
+
+    series     : column name in phillips_us_historical.csv  ("unemployment" | "inflation")
+    y_label    : y-axis title, e.g. "Unemployment Rate (%)"
+    fname      : output file stem, e.g. "chart_unemployment_us_historical"
+    """
+    csv_path = DATA_DIR / "phillips_us_historical.csv"
+    if not csv_path.exists():
+        sys.exit(f"ERROR: {csv_path} not found. Run collect_data_historical_us.py first.")
+    df = pd.read_csv(csv_path).dropna(subset=[series])
+
+    df_est = df[df["era"] == "estimate"].sort_values("year")
+    df_off = df[df["era"] == "official"].sort_values("year")
+
+    x_est = df_est["year"].tolist()
+    y_est = df_est[series].round(2).tolist()
+    x_off = df_off["year"].tolist()
+    y_off = df_off[series].round(2).tolist()
+
+    # Prepend last estimate point to official trace for visual continuity
+    if not df_est.empty:
+        x_off = [int(df_est.iloc[-1]["year"])] + x_off
+        y_off = [round(float(df_est.iloc[-1][series]), 2)] + y_off
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=x_est, y=y_est,
+        name="Estimates (Lebergott / Shiller)",
+        mode="lines+markers",
+        line=dict(color=hex_to_rgba(SINGLE_COLOR, 0.55), width=2.5, dash="dash"),
+        marker=dict(size=5, symbol="circle-open",
+                    color=hex_to_rgba(SINGLE_COLOR, 0.55),
+                    line=dict(color=hex_to_rgba(SINGLE_COLOR, 0.55), width=1.5)),
+        hovertemplate=f"<b>%{{x}}</b><br>{y_label.split('(')[0].strip()}: %{{y:.1f}}%<br>"
+                      f"<i>{hover_est}</i><extra></extra>",
+        showlegend=True,
+    ))
+    fig.add_trace(go.Scatter(
+        x=x_off, y=y_off,
+        name="Official (FRED)",
+        mode="lines+markers",
+        line=dict(color=SINGLE_COLOR, width=2.5),
+        marker=dict(size=5),
+        hovertemplate=f"<b>%{{x}}</b><br>{y_label.split('(')[0].strip()}: %{{y:.1f}}%<br>"
+                      f"<i>{hover_off}</i><extra></extra>",
+        showlegend=True,
+    ))
+
+    ymin = int(df["year"].min())
+    ymax = int(df["year"].max())
+    fig.update_layout(base_layout(
+        xaxis=dict(title="Year", tickformat="d", gridcolor="#f0f0f0",
+                   range=[ymin - 1, ymax + 1]),
+        yaxis=dict(title=y_label, gridcolor="#f0f0f0",
+                   zeroline=True, zerolinecolor="#ddd", zerolinewidth=1),
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=1.01,
+                    xanchor="left", x=0, font=dict(size=10),
+                    bgcolor="rgba(255,255,255,0.85)",
+                    bordercolor="#ddd", borderwidth=1),
+    ))
+
+    chart_js = (
+        f"var fig={fig.to_json()};\n"
+        f"Plotly.newPlot('chart',fig.data,fig.layout,{{responsive:true}});\n"
+        + EXPORT_JS.replace("%%FNAME%%", fname)
+    )
+    ctrl_js = """\
+function applyYearRange(){
+  var y0=parseInt(document.getElementById('yrMin').value);
+  var y1=parseInt(document.getElementById('yrMax').value);
+  if(y0>y1){alert('Min year must be \u2264 max year.');return;}
+  Plotly.relayout('chart',{'xaxis.range':[y0-0.5,y1+0.5]});}
+document.getElementById('showEst').addEventListener('change',function(){
+  Plotly.restyle('chart',{visible:this.checked?true:'legendonly'},[0]);});
+"""
+
+    html = f"""\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title} | ECON 10 | Clark University</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+<style>
+*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
+body{{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+     background:#fafaf8;color:#1a1a1a;height:100vh;
+     display:flex;flex-direction:column;overflow:hidden}}
+header{{background:#8b0000;color:#fff;padding:.75rem 1.2rem;
+       border-bottom:3px solid #5a0000;display:flex;align-items:center;
+       gap:.8rem;flex-shrink:0}}
+header h1{{font-size:.98rem;font-weight:600;letter-spacing:.01em}}
+header .sub{{font-size:.76rem;opacity:.75}}
+.back{{font-size:.74rem;color:#ffd0d0;text-decoration:none;margin-left:auto;white-space:nowrap}}
+.back:hover{{color:#fff}}
+.toolbar{{display:flex;align-items:center;gap:.5rem;padding:.45rem 1.2rem;
+         background:#fff;border-bottom:1px solid #e8e8e8;flex-shrink:0}}
+.toolbar span{{font-size:.72rem;color:#888;margin-right:.2rem}}
+.tbtn{{font-size:.72rem;padding:.22rem .65rem;border:1px solid #ccc;border-radius:3px;
+      background:#fff;cursor:pointer;color:#444;font-family:inherit}}
+.tbtn:hover{{border-color:#8b0000;color:#8b0000}}
+.layout{{display:flex;flex:1;overflow:hidden}}
+.sidebar{{width:200px;min-width:170px;background:#fff;border-right:1px solid #e0e0e0;
+         padding:.85rem .8rem;overflow-y:auto;flex-shrink:0;
+         display:flex;flex-direction:column;gap:.7rem}}
+.ctrl-hd{{font-size:.67rem;font-weight:600;letter-spacing:.1em;
+         text-transform:uppercase;color:#8b0000}}
+.yr-row{{display:flex;align-items:center;gap:.3rem;margin-top:.35rem}}
+.yr-row input{{width:56px;font-size:.76rem;padding:.18rem .28rem;border:1px solid #ccc;
+              border-radius:3px;text-align:center;font-family:inherit}}
+.yr-row span{{font-size:.72rem;color:#666}}
+.apply-btn{{width:100%;margin-top:.45rem;font-size:.74rem;padding:.25rem 0;
+           background:#8b0000;color:#fff;border:none;border-radius:3px;
+           cursor:pointer;font-family:inherit}}
+.apply-btn:hover{{background:#a00000}}
+.opt-row{{display:flex;align-items:center;gap:.35rem;margin-top:.5rem}}
+.opt-row input{{accent-color:#8b0000;cursor:pointer}}
+.opt-row label{{font-size:.76rem;cursor:pointer}}
+.src-section{{padding-top:.7rem;border-top:1px solid #eee;margin-top:auto}}
+.src-section .ctrl-hd{{margin-bottom:.35rem}}
+.src-section p{{font-size:.72rem;color:#555;line-height:1.5}}
+.src-section a{{color:#1f77b4;font-size:.72rem}}
+.chart-wrap{{flex:1;overflow:hidden;display:flex;flex-direction:column;padding:.35rem}}
+#chart{{width:100%;flex:1}}
+footer{{font-size:.68rem;color:#aaa;text-align:center;padding:.35rem;
+       border-top:1px solid #eee;flex-shrink:0}}
+@media print{{
+  header .back,.toolbar,.sidebar,footer{{display:none}}
+  body{{overflow:visible;height:auto}}.layout{{display:block}}
+  .chart-wrap{{padding:0}}#chart{{width:100% !important;height:90vh !important}}}}
+</style>
+</head>
+<body>
+<header>
+  <h1>{title}</h1>
+  <span class="sub">{subtitle}</span>
+  <a class="back" href="../index.html">&larr; All Charts</a>
+</header>
+<div class="toolbar">
+  <span>Export:</span>
+  <button class="tbtn" onclick="dlPNG()">PNG</button>
+  <button class="tbtn" onclick="dlSVG()">SVG</button>
+  <button class="tbtn" onclick="window.print()">Print / PDF</button>
+</div>
+<div class="layout">
+  <aside class="sidebar">
+    <div>
+      <div class="ctrl-hd">Year Range</div>
+      <div class="yr-row">
+        <input type="number" id="yrMin" value="{ymin}" min="{ymin}" max="{ymax}">
+        <span>-</span>
+        <input type="number" id="yrMax" value="{ymax}" min="{ymin}" max="{ymax}">
+      </div>
+      <button class="apply-btn" onclick="applyYearRange()">Apply</button>
+      <div class="opt-row">
+        <input type="checkbox" id="showEst" checked>
+        <label for="showEst">Show estimates</label>
+      </div>
+    </div>
+    <div class="src-section">
+      <div class="ctrl-hd">Data Source</div>
+{source_html}
+    </div>
+  </aside>
+  <div class="chart-wrap"><div id="chart"></div></div>
+</div>
+<footer>
+  Source: {footer_source} &nbsp;|&nbsp;
+  ECON 10 &ndash; Economics and the World Economy &nbsp;|&nbsp;
+  &copy; 2026 Kensuke Suzuki, Clark University
+</footer>
+<script>
+{chart_js}
+{ctrl_js}
+</script>
+</body>
+</html>"""
+
+    (DOCS_DIR / f"{fname}.html").write_text(html, encoding="utf-8")
+    print(f"  Saved -> {(DOCS_DIR / f'{fname}.html').relative_to(REPO_ROOT)}")
+
+
+SOURCE_UNEMP_US_HIST = """\
+      <p><b>Pre-1948 (estimates)</b><br>
+      Lebergott (1964),<br>
+      &nbsp;&nbsp;Manpower in Economic Growth,<br>
+      &nbsp;&nbsp;Table A-3. Annual.<br>
+      <em>Romer (1986) offers alternative<br>
+      estimates (generally lower).</em></p>
+      <p style="margin-top:.5rem"><b>Post-1947 (official)</b><br>
+      FRED <code>UNRATE</code><br>
+      U.S. Bureau of Labor Statistics</p>
+      <a href="https://fred.stlouisfed.org/series/UNRATE"
+         target="_blank">UNRATE on FRED &rarr;</a>"""
+
+SOURCE_INF_US_HIST = """\
+      <p><b>Pre-1948 (estimates)</b><br>
+      Robert Shiller / Yale<br>
+      &nbsp;&nbsp;ie_data.xls, annual avg YoY&nbsp;%<br>
+      <em>Computed from Shiller CPI index.</em></p>
+      <p style="margin-top:.5rem"><b>Post-1947 (official)</b><br>
+      FRED <code>CPIAUCSL</code><br>
+      U.S. Bureau of Labor Statistics</p>
+      <a href="https://fred.stlouisfed.org/series/CPIAUCSL"
+         target="_blank">CPIAUCSL on FRED &rarr;</a>"""
+
+
 # -- Main ---------------------------------------------------------------------
 def main():
     print("=" * 55)
@@ -895,8 +1109,34 @@ def main():
     print("\n[5/6] Phillips curve -- OECD (FRED harmonized, 1960+)")
     build_phillips_oecd_chart()
 
-    print("\n[6/6] Phillips curve -- US historical (1890+, Lebergott + Shiller)")
+    print("\n[6/8] Phillips curve -- US historical (1890+, Lebergott + Shiller)")
     build_phillips_us_historical_chart()
+
+    print("\n[7/8] Unemployment rate -- US historical line chart (1890+)")
+    build_us_historical_line_chart(
+        series="unemployment",
+        y_label="Unemployment Rate (%)",
+        fname="chart_unemployment_us_historical",
+        title="Unemployment Rate \u2014 United States (1890\u2013present)",
+        subtitle="Lebergott (1964) pre-1948 \u2013 FRED UNRATE post-1947",
+        hover_est="Lebergott (1964) estimate",
+        hover_off="FRED UNRATE (official)",
+        footer_source="Lebergott (1964); FRED UNRATE",
+        source_html=SOURCE_UNEMP_US_HIST,
+    )
+
+    print("\n[8/8] Inflation rate -- US historical line chart (1890+)")
+    build_us_historical_line_chart(
+        series="inflation",
+        y_label="Inflation Rate (%, CPI)",
+        fname="chart_inflation_us_historical",
+        title="Inflation Rate \u2014 United States (1890\u2013present)",
+        subtitle="Shiller/Yale CPI pre-1948 \u2013 FRED CPIAUCSL post-1947",
+        hover_est="Shiller/Yale CPI (estimate)",
+        hover_off="FRED CPIAUCSL (official)",
+        footer_source="Shiller/Yale CPI; FRED CPIAUCSL",
+        source_html=SOURCE_INF_US_HIST,
+    )
 
     print("\nAll charts saved to docs/econ10/")
 
