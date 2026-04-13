@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unemployment Rate | ECON 10 | Clark University</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Arial',sans-serif;background:#fafaf8;color:#1a1a1a;
+     height:100vh;display:flex;flex-direction:column;overflow:hidden}
+header{background:#8b0000;color:#fff;padding:.85rem 1.3rem;
+       border-bottom:3px solid #5a0000;display:flex;align-items:baseline;
+       gap:.8rem;flex-shrink:0}
+header h1{font-size:1rem;font-weight:bold;letter-spacing:.02em}
+header .sub{font-size:.78rem;opacity:.78}
+.back{font-size:.75rem;color:#ffd0d0;text-decoration:none;margin-left:auto}
+.back:hover{color:#fff}
+.layout{display:flex;flex:1;overflow:hidden}
+.sidebar{width:185px;min-width:155px;background:#fff;border-right:1px solid #e0e0e0;
+         padding:.9rem .85rem;overflow-y:auto;flex-shrink:0}
+.ctrl-hd{font-size:.68rem;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;
+         color:#8b0000;margin-bottom:.45rem}
+.btn-row{display:flex;gap:.35rem;margin-bottom:.55rem}
+.btn-row button{font-size:.7rem;padding:.13rem .38rem;border:1px solid #ccc;
+                border-radius:3px;background:#fff;cursor:pointer;color:#555}
+.btn-row button:hover{border-color:#8b0000;color:#8b0000}
+.cb-label{display:flex;align-items:center;gap:.3rem;font-size:.78rem;
+          padding:.22rem 0;cursor:pointer;line-height:1.3}
+.cb-label input{accent-color:#8b0000;flex-shrink:0}
+.yr-section{margin-top:1rem;padding-top:.85rem;border-top:1px solid #eee}
+.yr-row{display:flex;align-items:center;gap:.3rem;margin-top:.35rem}
+.yr-row input{width:54px;font-size:.76rem;padding:.18rem .28rem;border:1px solid #ccc;
+              border-radius:3px;text-align:center}
+.yr-row span{font-size:.72rem;color:#666}
+.apply-btn{margin-top:.45rem;font-size:.73rem;padding:.22rem .6rem;
+           background:#8b0000;color:#fff;border:none;border-radius:3px;cursor:pointer}
+.apply-btn:hover{background:#a00000}
+.chart-wrap{flex:1;overflow:hidden;display:flex;flex-direction:column;padding:.4rem}
+#chart{width:100%;flex:1}
+footer{font-size:.7rem;color:#aaa;text-align:center;padding:.4rem;
+       border-top:1px solid #eee;flex-shrink:0}
+</style>
+</head>
+<body>
+<header>
+  <h1>Unemployment Rate</h1>
+  <span class="sub">Unemployment Rate (%) · 1990–2023 · World Bank</span>
+  <a class="back" href="index.html">← ECON 10</a>
+</header>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="ctrl-hd">Countries</div>
+    <div class="btn-row">
+      <button onclick="selAll()">All</button>
+      <button onclick="selNone()">None</button>
+    </div>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="United States" checked> United States</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="Germany" checked> Germany</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="Japan" checked> Japan</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="China" checked> China</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="Brazil" checked> Brazil</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="India" checked> India</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="United Kingdom" checked> United Kingdom</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="Mexico" checked> Mexico</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="Argentina" checked> Argentina</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="South Africa" checked> South Africa</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="France" checked> France</label>
+    <label class="cb-label"><input type="checkbox" class="ccb" value="Canada" checked> Canada</label>
+
+  </aside>
+  <div class="chart-wrap">
+    <div id="chart"></div>
+  </div>
+</div>
+<footer>
+  Source: World Bank Open Data &nbsp;|&nbsp;
+  ECON 10 – Introductory Economics &nbsp;|&nbsp;
+  &copy; 2026 Kensuke Suzuki, Clark University
+</footer>
+<script>
+var fig = {"data":[{"hovertemplate":"\u003cb\u003eUnited States\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#1f77b4","width":2},"marker":{"size":5},"mode":"lines+markers","name":"United States","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[6.8,7.5,6.9,6.12,5.65,5.45,5.0,4.51,4.22,3.99,4.73,5.78,5.99,5.53,5.08,4.62,4.62,5.78,9.25,9.63,8.95,8.07,7.38,6.17,5.28,4.87,4.36,3.9,3.67,8.06,5.35,3.65,3.64],"type":"scatter"},{"hovertemplate":"\u003cb\u003eGermany\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#d62728","width":2},"marker":{"size":5},"mode":"lines+markers","name":"Germany","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[5.32,6.32,7.68,8.73,8.16,8.82,9.86,9.79,8.85,7.92,7.77,8.48,9.78,10.73,11.19,10.28,8.73,7.51,7.88,7.04,5.97,5.37,5.32,4.98,4.61,4.1,3.78,3.38,3.16,3.88,3.59,3.14,3.07],"type":"scatter"},{"hovertemplate":"\u003cb\u003eJapan\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#2ca02c","width":2},"marker":{"size":5},"mode":"lines+markers","name":"Japan","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[2.06,2.16,2.54,2.89,3.15,3.38,3.37,4.08,4.68,4.75,5.02,5.39,5.25,4.73,4.45,4.19,3.89,4.0,5.07,5.1,4.55,4.36,4.04,3.59,3.38,3.13,2.82,2.47,2.35,2.81,2.81,2.61,2.6],"type":"scatter"},{"hovertemplate":"\u003cb\u003eChina\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#ff7f0e","width":2},"marker":{"size":5},"mode":"lines+markers","name":"China","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[2.37,2.37,2.69,2.9,3.0,3.12,3.23,3.24,3.25,3.26,3.8,4.24,4.58,4.49,4.52,4.43,4.35,4.59,4.72,4.53,4.55,4.58,4.6,4.63,4.65,4.56,4.47,4.31,4.56,5.0,4.55,4.98,4.67],"type":"scatter"},{"hovertemplate":"\u003cb\u003eBrazil\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#9467bd","width":2},"marker":{"size":5},"mode":"lines+markers","name":"Brazil","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[6.89,7.09,6.03,6.58,7.09,8.04,9.0,10.15,11.12,10.89,10.65,10.64,11.17,10.07,10.55,9.69,9.28,8.27,9.42,8.42,7.58,7.25,7.07,6.76,8.54,11.58,12.79,12.33,11.94,13.7,13.16,9.23,7.95],"type":"scatter"},{"hovertemplate":"\u003cb\u003eIndia\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#8c564b","width":2},"marker":{"size":5},"mode":"lines+markers","name":"India","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[7.64,7.65,7.66,7.59,7.57,7.54,7.57,7.6,7.58,7.59,7.61,7.68,7.63,7.6,7.55,7.55,7.56,7.63,7.64,7.63,7.61,7.64,7.68,7.66,7.63,7.61,7.63,7.65,6.51,7.86,6.38,4.82,4.17],"type":"scatter"},{"hovertemplate":"\u003cb\u003eUnited Kingdom\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#e377c2","width":2},"marker":{"size":5},"mode":"lines+markers","name":"United Kingdom","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[8.55,9.77,10.35,9.65,8.69,8.19,7.07,6.2,6.04,5.56,4.7,5.04,4.81,4.59,4.88,5.47,5.4,5.75,7.68,7.97,8.2,8.28,7.75,6.4,5.55,4.91,4.5,4.14,3.66,4.47,4.86,3.77,4.03],"type":"scatter"},{"hovertemplate":"\u003cb\u003eMexico\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#17becf","width":2},"marker":{"size":5},"mode":"lines+markers","name":"Mexico","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[3.14,3.24,3.36,4.44,7.1,5.46,4.24,3.73,2.6,2.65,2.63,3.0,3.46,3.94,3.56,3.57,3.63,3.87,5.36,5.3,5.18,4.89,4.92,4.82,4.31,3.85,3.42,3.28,3.48,4.44,4.02,3.26,2.76],"type":"scatter"},{"hovertemplate":"\u003cb\u003eArgentina\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#4e79a7","width":2},"marker":{"size":5},"mode":"lines+markers","name":"Argentina","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[5.44,6.36,10.1,11.76,18.8,17.11,14.82,12.65,14.05,15.0,17.32,19.59,15.36,13.52,11.51,10.08,8.47,7.84,8.64,7.71,7.18,7.22,7.1,7.27,7.58,8.09,8.35,9.22,9.84,11.46,8.74,6.8,6.14],"type":"scatter"},{"hovertemplate":"\u003cb\u003eSouth Africa\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f28e2b","width":2},"marker":{"size":5},"mode":"lines+markers","name":"South Africa","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[23.14,23.46,23.36,23.07,22.7,22.5,22.55,22.74,22.88,22.79,22.65,22.58,22.68,22.57,22.47,22.3,22.26,22.41,23.52,24.68,24.64,24.73,24.56,24.89,25.15,26.54,27.04,26.91,28.47,29.22,34.01,33.27,32.1],"type":"scatter"},{"hovertemplate":"\u003cb\u003eFrance\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#59a14f","width":2},"marker":{"size":5},"mode":"lines+markers","name":"France","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[9.13,10.2,11.32,12.59,11.83,12.37,12.57,12.07,11.98,10.22,8.61,8.7,8.31,8.91,8.88,8.83,8.01,7.39,9.12,9.28,9.23,9.84,9.91,10.27,10.35,10.06,9.41,9.02,8.41,8.01,7.87,7.3,7.34],"type":"scatter"},{"hovertemplate":"\u003cb\u003eCanada\u003c\u002fb\u003e\u003cbr\u003eYear: %{x}\u003cbr\u003eUnemployment Rate (%): %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#e15759","width":2},"marker":{"size":5},"mode":"lines+markers","name":"Canada","x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],"y":[10.32,11.2,11.38,10.4,9.49,9.62,9.1,8.28,7.58,6.83,7.22,7.66,7.57,7.18,6.76,6.48,6.16,6.28,8.46,8.18,7.64,7.39,7.14,7.02,6.94,7.04,6.43,5.84,5.69,9.66,7.53,5.28,5.42],"type":"scatter"}],"layout":{"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"Arial","size":12},"legend":{"font":{"size":11},"orientation":"h","x":0,"xanchor":"left","y":1.02,"yanchor":"bottom"},"margin":{"b":70,"l":55,"r":20,"t":40},"xaxis":{"rangeslider":{"thickness":0.06,"visible":true},"title":{"text":"Year"},"gridcolor":"#f0f0f0","tickformat":"d"},"yaxis":{"title":{"text":"Unemployment Rate (%)"},"gridcolor":"#f0f0f0","zeroline":true,"zerolinecolor":"#ccc","zerolinewidth":1},"hovermode":"closest","paper_bgcolor":"#fff","plot_bgcolor":"#fff"}};
+Plotly.newPlot('chart', fig.data, fig.layout, {responsive: true});
+var TRACE_NAMES = ["United States", "Germany", "Japan", "China", "Brazil", "India", "United Kingdom", "Mexico", "Argentina", "South Africa", "France", "Canada"];
+
+function onCbChange(cb) {
+    var idx = TRACE_NAMES.indexOf(cb.value);
+    if (idx === -1) return;
+    Plotly.restyle('chart', {visible: cb.checked ? true : 'legendonly'}, [idx]);
+}
+function selAll() {
+    var vis = TRACE_NAMES.map(function() { return true; });
+    Plotly.restyle('chart', {visible: vis}, TRACE_NAMES.map(function(_, i) { return i; }));
+    document.querySelectorAll('.ccb').forEach(function(c) { c.checked = true; });
+}
+function selNone() {
+    var vis = TRACE_NAMES.map(function() { return 'legendonly'; });
+    Plotly.restyle('chart', {visible: vis}, TRACE_NAMES.map(function(_, i) { return i; }));
+    document.querySelectorAll('.ccb').forEach(function(c) { c.checked = false; });
+}
+document.querySelectorAll('.ccb').forEach(function(c) {
+    c.addEventListener('change', function() { onCbChange(c); });
+});
+</script>
+</body>
+</html>

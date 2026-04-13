@@ -1,0 +1,463 @@
+country,iso2,year,value
+Argentina,AR,1991,5.44
+Argentina,AR,1992,6.36
+Argentina,AR,1993,10.1
+Argentina,AR,1994,11.76
+Argentina,AR,1995,18.8
+Argentina,AR,1996,17.11
+Argentina,AR,1997,14.82
+Argentina,AR,1998,12.65
+Argentina,AR,1999,14.05
+Argentina,AR,2000,15.0
+Argentina,AR,2001,17.32
+Argentina,AR,2002,19.59
+Argentina,AR,2003,15.36
+Argentina,AR,2004,13.522
+Argentina,AR,2005,11.506
+Argentina,AR,2006,10.078
+Argentina,AR,2007,8.47
+Argentina,AR,2008,7.837
+Argentina,AR,2009,8.645
+Argentina,AR,2010,7.714
+Argentina,AR,2011,7.18
+Argentina,AR,2012,7.217
+Argentina,AR,2013,7.1
+Argentina,AR,2014,7.268
+Argentina,AR,2015,7.577
+Argentina,AR,2016,8.088
+Argentina,AR,2017,8.347
+Argentina,AR,2018,9.22
+Argentina,AR,2019,9.843
+Argentina,AR,2020,11.461
+Argentina,AR,2021,8.736
+Argentina,AR,2022,6.805
+Argentina,AR,2023,6.139
+Brazil,BR,1991,6.887
+Brazil,BR,1992,7.086
+Brazil,BR,1993,6.03
+Brazil,BR,1994,6.579
+Brazil,BR,1995,7.092
+Brazil,BR,1996,8.035
+Brazil,BR,1997,9.003
+Brazil,BR,1998,10.15
+Brazil,BR,1999,11.125
+Brazil,BR,2000,10.889
+Brazil,BR,2001,10.649
+Brazil,BR,2002,10.641
+Brazil,BR,2003,11.168
+Brazil,BR,2004,10.072
+Brazil,BR,2005,10.551
+Brazil,BR,2006,9.692
+Brazil,BR,2007,9.28
+Brazil,BR,2008,8.268
+Brazil,BR,2009,9.419
+Brazil,BR,2010,8.42
+Brazil,BR,2011,7.578
+Brazil,BR,2012,7.251
+Brazil,BR,2013,7.071
+Brazil,BR,2014,6.755
+Brazil,BR,2015,8.538
+Brazil,BR,2016,11.58
+Brazil,BR,2017,12.792
+Brazil,BR,2018,12.329
+Brazil,BR,2019,11.936
+Brazil,BR,2020,13.697
+Brazil,BR,2021,13.158
+Brazil,BR,2022,9.231
+Brazil,BR,2023,7.947
+Canada,CA,1991,10.316
+Canada,CA,1992,11.197
+Canada,CA,1993,11.377
+Canada,CA,1994,10.395
+Canada,CA,1995,9.489
+Canada,CA,1996,9.62
+Canada,CA,1997,9.1
+Canada,CA,1998,8.278
+Canada,CA,1999,7.583
+Canada,CA,2000,6.829
+Canada,CA,2001,7.219
+Canada,CA,2002,7.665
+Canada,CA,2003,7.574
+Canada,CA,2004,7.185
+Canada,CA,2005,6.758
+Canada,CA,2006,6.484
+Canada,CA,2007,6.156
+Canada,CA,2008,6.284
+Canada,CA,2009,8.46
+Canada,CA,2010,8.178
+Canada,CA,2011,7.637
+Canada,CA,2012,7.392
+Canada,CA,2013,7.143
+Canada,CA,2014,7.023
+Canada,CA,2015,6.945
+Canada,CA,2016,7.038
+Canada,CA,2017,6.426
+Canada,CA,2018,5.837
+Canada,CA,2019,5.69
+Canada,CA,2020,9.657
+Canada,CA,2021,7.527
+Canada,CA,2022,5.279
+Canada,CA,2023,5.415
+China,CN,1991,2.37
+China,CN,1992,2.37
+China,CN,1993,2.69
+China,CN,1994,2.9
+China,CN,1995,3.0
+China,CN,1996,3.12
+China,CN,1997,3.23
+China,CN,1998,3.24
+China,CN,1999,3.25
+China,CN,2000,3.26
+China,CN,2001,3.8
+China,CN,2002,4.24
+China,CN,2003,4.58
+China,CN,2004,4.49
+China,CN,2005,4.52
+China,CN,2006,4.43
+China,CN,2007,4.35
+China,CN,2008,4.59
+China,CN,2009,4.72
+China,CN,2010,4.53
+China,CN,2011,4.55
+China,CN,2012,4.58
+China,CN,2013,4.6
+China,CN,2014,4.63
+China,CN,2015,4.65
+China,CN,2016,4.56
+China,CN,2017,4.47
+China,CN,2018,4.31
+China,CN,2019,4.56
+China,CN,2020,5.0
+China,CN,2021,4.55
+China,CN,2022,4.98
+China,CN,2023,4.67
+France,FR,1991,9.134
+France,FR,1992,10.203
+France,FR,1993,11.32
+France,FR,1994,12.593
+France,FR,1995,11.834
+France,FR,1996,12.367
+France,FR,1997,12.566
+France,FR,1998,12.074
+France,FR,1999,11.981
+France,FR,2000,10.218
+France,FR,2001,8.61
+France,FR,2002,8.702
+France,FR,2003,8.306
+France,FR,2004,8.914
+France,FR,2005,8.882
+France,FR,2006,8.832
+France,FR,2007,8.008
+France,FR,2008,7.386
+France,FR,2009,9.122
+France,FR,2010,9.279
+France,FR,2011,9.228
+France,FR,2012,9.841
+France,FR,2013,9.913
+France,FR,2014,10.273
+France,FR,2015,10.354
+France,FR,2016,10.057
+France,FR,2017,9.409
+France,FR,2018,9.018
+France,FR,2019,8.415
+France,FR,2020,8.009
+France,FR,2021,7.871
+France,FR,2022,7.303
+France,FR,2023,7.335
+Germany,DE,1991,5.316
+Germany,DE,1992,6.323
+Germany,DE,1993,7.675
+Germany,DE,1994,8.727
+Germany,DE,1995,8.158
+Germany,DE,1996,8.822
+Germany,DE,1997,9.861
+Germany,DE,1998,9.787
+Germany,DE,1999,8.854
+Germany,DE,2000,7.917
+Germany,DE,2001,7.773
+Germany,DE,2002,8.482
+Germany,DE,2003,9.779
+Germany,DE,2004,10.727
+Germany,DE,2005,11.193
+Germany,DE,2006,10.277
+Germany,DE,2007,8.732
+Germany,DE,2008,7.508
+Germany,DE,2009,7.88
+Germany,DE,2010,7.043
+Germany,DE,2011,5.967
+Germany,DE,2012,5.372
+Germany,DE,2013,5.316
+Germany,DE,2014,4.979
+Germany,DE,2015,4.612
+Germany,DE,2016,4.104
+Germany,DE,2017,3.781
+Germany,DE,2018,3.384
+Germany,DE,2019,3.163
+Germany,DE,2020,3.881
+Germany,DE,2021,3.594
+Germany,DE,2022,3.137
+Germany,DE,2023,3.071
+India,IN,1991,7.641
+India,IN,1992,7.649
+India,IN,1993,7.662
+India,IN,1994,7.593
+India,IN,1995,7.57
+India,IN,1996,7.537
+India,IN,1997,7.574
+India,IN,1998,7.596
+India,IN,1999,7.583
+India,IN,2000,7.589
+India,IN,2001,7.611
+India,IN,2002,7.681
+India,IN,2003,7.633
+India,IN,2004,7.598
+India,IN,2005,7.551
+India,IN,2006,7.553
+India,IN,2007,7.562
+India,IN,2008,7.629
+India,IN,2009,7.636
+India,IN,2010,7.631
+India,IN,2011,7.609
+India,IN,2012,7.645
+India,IN,2013,7.678
+India,IN,2014,7.656
+India,IN,2015,7.629
+India,IN,2016,7.611
+India,IN,2017,7.626
+India,IN,2018,7.652
+India,IN,2019,6.51
+India,IN,2020,7.859
+India,IN,2021,6.38
+India,IN,2022,4.822
+India,IN,2023,4.172
+Japan,JP,1991,2.059
+Japan,JP,1992,2.158
+Japan,JP,1993,2.539
+Japan,JP,1994,2.89
+Japan,JP,1995,3.15
+Japan,JP,1996,3.383
+Japan,JP,1997,3.374
+Japan,JP,1998,4.078
+Japan,JP,1999,4.677
+Japan,JP,2000,4.748
+Japan,JP,2001,5.02
+Japan,JP,2002,5.386
+Japan,JP,2003,5.251
+Japan,JP,2004,4.734
+Japan,JP,2005,4.446
+Japan,JP,2006,4.192
+Japan,JP,2007,3.888
+Japan,JP,2008,4.002
+Japan,JP,2009,5.068
+Japan,JP,2010,5.102
+Japan,JP,2011,4.55
+Japan,JP,2012,4.358
+Japan,JP,2013,4.038
+Japan,JP,2014,3.589
+Japan,JP,2015,3.385
+Japan,JP,2016,3.132
+Japan,JP,2017,2.822
+Japan,JP,2018,2.467
+Japan,JP,2019,2.351
+Japan,JP,2020,2.809
+Japan,JP,2021,2.808
+Japan,JP,2022,2.614
+Japan,JP,2023,2.6
+"Korea, Rep.",,1991,2.407
+"Korea, Rep.",,1992,2.513
+"Korea, Rep.",,1993,2.878
+"Korea, Rep.",,1994,2.476
+"Korea, Rep.",,1995,2.063
+"Korea, Rep.",,1996,2.048
+"Korea, Rep.",,1997,2.608
+"Korea, Rep.",,1998,6.963
+"Korea, Rep.",,1999,6.342
+"Korea, Rep.",,2000,4.063
+"Korea, Rep.",,2001,3.699
+"Korea, Rep.",,2002,3.046
+"Korea, Rep.",,2003,3.348
+"Korea, Rep.",,2004,3.42
+"Korea, Rep.",,2005,3.482
+"Korea, Rep.",,2006,3.254
+"Korea, Rep.",,2007,3.013
+"Korea, Rep.",,2008,2.959
+"Korea, Rep.",,2009,3.363
+"Korea, Rep.",,2010,3.324
+"Korea, Rep.",,2011,2.992
+"Korea, Rep.",,2012,2.812
+"Korea, Rep.",,2013,3.067
+"Korea, Rep.",,2014,3.082
+"Korea, Rep.",,2015,3.546
+"Korea, Rep.",,2016,3.65
+"Korea, Rep.",,2017,3.653
+"Korea, Rep.",,2018,3.824
+"Korea, Rep.",,2019,3.746
+"Korea, Rep.",,2020,3.931
+"Korea, Rep.",,2021,3.639
+"Korea, Rep.",,2022,2.857
+"Korea, Rep.",,2023,2.675
+Mexico,MX,1991,3.145
+Mexico,MX,1992,3.235
+Mexico,MX,1993,3.365
+Mexico,MX,1994,4.436
+Mexico,MX,1995,7.095
+Mexico,MX,1996,5.465
+Mexico,MX,1997,4.235
+Mexico,MX,1998,3.733
+Mexico,MX,1999,2.598
+Mexico,MX,2000,2.646
+Mexico,MX,2001,2.627
+Mexico,MX,2002,3.003
+Mexico,MX,2003,3.455
+Mexico,MX,2004,3.937
+Mexico,MX,2005,3.558
+Mexico,MX,2006,3.566
+Mexico,MX,2007,3.628
+Mexico,MX,2008,3.874
+Mexico,MX,2009,5.356
+Mexico,MX,2010,5.303
+Mexico,MX,2011,5.175
+Mexico,MX,2012,4.892
+Mexico,MX,2013,4.921
+Mexico,MX,2014,4.819
+Mexico,MX,2015,4.311
+Mexico,MX,2016,3.853
+Mexico,MX,2017,3.419
+Mexico,MX,2018,3.275
+Mexico,MX,2019,3.477
+Mexico,MX,2020,4.44
+Mexico,MX,2021,4.019
+Mexico,MX,2022,3.256
+Mexico,MX,2023,2.765
+South Africa,ZA,1991,23.137
+South Africa,ZA,1992,23.463
+South Africa,ZA,1993,23.361
+South Africa,ZA,1994,23.067
+South Africa,ZA,1995,22.705
+South Africa,ZA,1996,22.5
+South Africa,ZA,1997,22.549
+South Africa,ZA,1998,22.739
+South Africa,ZA,1999,22.884
+South Africa,ZA,2000,22.788
+South Africa,ZA,2001,22.652
+South Africa,ZA,2002,22.579
+South Africa,ZA,2003,22.679
+South Africa,ZA,2004,22.567
+South Africa,ZA,2005,22.472
+South Africa,ZA,2006,22.304
+South Africa,ZA,2007,22.26
+South Africa,ZA,2008,22.407
+South Africa,ZA,2009,23.523
+South Africa,ZA,2010,24.683
+South Africa,ZA,2011,24.639
+South Africa,ZA,2012,24.727
+South Africa,ZA,2013,24.561
+South Africa,ZA,2014,24.89
+South Africa,ZA,2015,25.149
+South Africa,ZA,2016,26.536
+South Africa,ZA,2017,27.035
+South Africa,ZA,2018,26.906
+South Africa,ZA,2019,28.468
+South Africa,ZA,2020,29.217
+South Africa,ZA,2021,34.007
+South Africa,ZA,2022,33.268
+South Africa,ZA,2023,32.098
+Turkiye,,1991,8.21
+Turkiye,,1992,8.509
+Turkiye,,1993,8.962
+Turkiye,,1994,8.577
+Turkiye,,1995,7.644
+Turkiye,,1996,6.629
+Turkiye,,1997,6.841
+Turkiye,,1998,6.888
+Turkiye,,1999,7.687
+Turkiye,,2000,6.495
+Turkiye,,2001,8.381
+Turkiye,,2002,10.358
+Turkiye,,2003,10.542
+Turkiye,,2004,10.838
+Turkiye,,2005,10.636
+Turkiye,,2006,10.227
+Turkiye,,2007,10.285
+Turkiye,,2008,10.965
+Turkiye,,2009,14.026
+Turkiye,,2010,11.879
+Turkiye,,2011,9.789
+Turkiye,,2012,9.21
+Turkiye,,2013,9.713
+Turkiye,,2014,9.901
+Turkiye,,2015,10.304
+Turkiye,,2016,10.899
+Turkiye,,2017,10.919
+Turkiye,,2018,10.956
+Turkiye,,2019,13.73
+Turkiye,,2020,13.148
+Turkiye,,2021,11.969
+Turkiye,,2022,10.465
+Turkiye,,2023,9.388
+United Kingdom,GB,1991,8.55
+United Kingdom,GB,1992,9.772
+United Kingdom,GB,1993,10.346
+United Kingdom,GB,1994,9.648
+United Kingdom,GB,1995,8.694
+United Kingdom,GB,1996,8.189
+United Kingdom,GB,1997,7.072
+United Kingdom,GB,1998,6.198
+United Kingdom,GB,1999,6.042
+United Kingdom,GB,2000,5.558
+United Kingdom,GB,2001,4.696
+United Kingdom,GB,2002,5.037
+United Kingdom,GB,2003,4.807
+United Kingdom,GB,2004,4.594
+United Kingdom,GB,2005,4.884
+United Kingdom,GB,2006,5.472
+United Kingdom,GB,2007,5.399
+United Kingdom,GB,2008,5.748
+United Kingdom,GB,2009,7.683
+United Kingdom,GB,2010,7.973
+United Kingdom,GB,2011,8.195
+United Kingdom,GB,2012,8.279
+United Kingdom,GB,2013,7.752
+United Kingdom,GB,2014,6.398
+United Kingdom,GB,2015,5.552
+United Kingdom,GB,2016,4.909
+United Kingdom,GB,2017,4.501
+United Kingdom,GB,2018,4.145
+United Kingdom,GB,2019,3.657
+United Kingdom,GB,2020,4.472
+United Kingdom,GB,2021,4.864
+United Kingdom,GB,2022,3.768
+United Kingdom,GB,2023,4.025
+United States,US,1991,6.8
+United States,US,1992,7.5
+United States,US,1993,6.9
+United States,US,1994,6.119
+United States,US,1995,5.65
+United States,US,1996,5.451
+United States,US,1997,5.0
+United States,US,1998,4.511
+United States,US,1999,4.219
+United States,US,2000,3.992
+United States,US,2001,4.731
+United States,US,2002,5.783
+United States,US,2003,5.989
+United States,US,2004,5.529
+United States,US,2005,5.084
+United States,US,2006,4.623
+United States,US,2007,4.622
+United States,US,2008,5.784
+United States,US,2009,9.254
+United States,US,2010,9.633
+United States,US,2011,8.949
+United States,US,2012,8.069
+United States,US,2013,7.375
+United States,US,2014,6.168
+United States,US,2015,5.28
+United States,US,2016,4.869
+United States,US,2017,4.355
+United States,US,2018,3.896
+United States,US,2019,3.669
+United States,US,2020,8.055
+United States,US,2021,5.349
+United States,US,2022,3.65
+United States,US,2023,3.638

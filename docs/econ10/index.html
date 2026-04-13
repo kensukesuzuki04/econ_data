@@ -14,32 +14,68 @@
     nav a { color: #ffd0d0; text-decoration: none; margin-right: 1.2rem; }
     nav a:hover { text-decoration: underline; color: #fff; }
     main { max-width: 860px; margin: 2.5rem auto; padding: 0 1.5rem; }
-    .chart-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
-    .chart-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 1.1rem 1.2rem;
-      text-decoration: none; color: inherit; transition: box-shadow 0.15s, border-color 0.15s; display: block; }
+    .section-label {
+      font-family: 'Arial', sans-serif; font-size: 0.75rem; font-weight: bold;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #8b0000;
+      border-bottom: 1px solid #ddd; padding-bottom: 0.4rem; margin-bottom: 1.3rem;
+    }
+    .chart-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .chart-card {
+      background: #fff; border: 1px solid #e0e0e0; border-radius: 6px;
+      padding: 1.1rem 1.2rem; text-decoration: none; color: inherit;
+      transition: box-shadow 0.15s, border-color 0.15s; display: block;
+    }
     .chart-card:hover { border-color: #8b0000; box-shadow: 0 2px 10px rgba(139,0,0,0.1); }
     .chart-card h3 { font-size: 0.95rem; font-family: 'Arial', sans-serif; margin-bottom: 0.3rem; }
     .chart-card p { font-size: 0.82rem; color: #666; line-height: 1.45; }
-    .chart-card .tag { display: inline-block; margin-top: 0.6rem; font-size: 0.72rem; font-family: 'Arial', sans-serif;
-      background: #f5eded; color: #8b0000; padding: 0.15rem 0.5rem; border-radius: 3px; }
-    .empty { font-size: 0.88rem; color: #999; font-style: italic; padding: 0.6rem 0; }
-    footer { text-align: center; font-size: 0.8rem; color: #aaa; font-family: 'Arial', sans-serif;
-      padding: 2.5rem 1rem 3rem; border-top: 1px solid #e8e8e8; margin-top: 2rem; }
+    .tag {
+      display: inline-block; margin-top: 0.6rem; font-size: 0.7rem;
+      font-family: 'Arial', sans-serif; background: #f5eded; color: #8b0000;
+      padding: 0.15rem 0.5rem; border-radius: 3px; margin-right: 0.3rem;
+    }
+    footer {
+      text-align: center; font-size: 0.8rem; color: #aaa; font-family: 'Arial', sans-serif;
+      padding: 2.5rem 1rem 3rem; border-top: 1px solid #e8e8e8; margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
 <header>
   <h1>ECON 10 &mdash; Introductory Economics</h1>
-  <p>Kensuke Suzuki &nbsp;·&nbsp; Clark University</p>
-  <nav>
-    <a href="../index.html">&larr; All Courses</a>
-  </nav>
+  <p>Kensuke Suzuki &nbsp;&middot;&nbsp; Clark University</p>
+  <nav><a href="../index.html">&larr; All Courses</a></nav>
 </header>
 <main>
-  <div class="chart-grid" id="grid-econ10">
-    <!-- Chart cards added here as visualizations are built -->
-    <p class="empty">Visualizations coming soon.</p>
+
+  <div class="section-label">Unemployment &amp; Inflation</div>
+  <div class="chart-grid">
+
+    <a class="chart-card" href="chart_inflation.html">
+      <h3>Inflation Rate</h3>
+      <p>Annual consumer price inflation for selected countries, 1990–2023. Toggle countries; zoom with the range slider.</p>
+      <span class="tag">Line chart</span>
+      <span class="tag">World Bank</span>
+    </a>
+
+    <a class="chart-card" href="chart_unemployment.html">
+      <h3>Unemployment Rate</h3>
+      <p>ILO-estimate unemployment rate for selected countries, 1990–2023. Toggle countries; zoom with the range slider.</p>
+      <span class="tag">Line chart</span>
+      <span class="tag">World Bank</span>
+    </a>
+
+    <a class="chart-card" href="chart_phillips.html">
+      <h3>Unemployment vs. Inflation</h3>
+      <p>Phillips curve scatter: each dot is one country-year. Filter by country and year range to explore the relationship.</p>
+      <span class="tag">Scatter</span>
+      <span class="tag">World Bank</span>
+    </a>
+
   </div>
+
 </main>
 <footer>&copy; 2026 Kensuke Suzuki, Clark University. All Rights Reserved.</footer>
 </body>
