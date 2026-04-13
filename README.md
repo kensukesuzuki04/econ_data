@@ -183,7 +183,7 @@ Column header in the downloaded CSV is `observation_date` (not `DATE`).
 These apply to all chart HTML files and the index page.
 
 ### Typography
-- **Font family:** `Georgia, 'Times New Roman', serif` — used for all body text, labels, axes, tooltips, and UI controls. Do not use sans-serif (Arial, Helvetica) anywhere.
+- **Font family:** `'Helvetica Neue', Helvetica, Arial, sans-serif` — used for all body text, labels, axes, tooltips, and UI controls. Applied in both the HTML/CSS (`font-family`) and the Plotly layout (`font=dict(family=...)`). Do not use serif fonts.
 - **Font size:** 12px base for chart axis labels (`font=dict(family=..., size=12)` in Plotly layout). UI controls use `0.72rem`–`0.78rem`. Footer uses `0.68rem`.
 
 ### Color palette
