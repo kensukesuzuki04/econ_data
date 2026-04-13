@@ -53,7 +53,7 @@ PALETTE = [
     "#edc948","#b07aa1","#ff9da7","#9c755f","#bab0ac",
 ]
 
-FONT_FAMILY = "'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+FONT_FAMILY = "Georgia, 'Times New Roman', serif"
 
 # -- Helper: load and order countries -----------------------------------------
 def load_countries(csv_path: Path) -> list:
@@ -83,7 +83,7 @@ PAGE_TEMPLATE = """\
 <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI','Helvetica Neue',Arial,sans-serif;
+body{font-family:Georgia,'Times New Roman',serif;
      background:#fafaf8;color:#1a1a1a;height:100vh;
      display:flex;flex-direction:column;overflow:hidden}
 
@@ -143,6 +143,12 @@ header .sub{font-size:.76rem;opacity:.75}
 .trend-row input{accent-color:#8b0000;cursor:pointer}
 .trend-row label{font-size:.76rem;cursor:pointer}
 
+/* Data source box */
+.src-section{padding-top:.7rem;border-top:1px solid #eee;margin-top:auto}
+.src-section .ctrl-hd{margin-bottom:.35rem}
+.src-section p{font-size:.72rem;color:#555;line-height:1.5}
+.src-section a{color:#1f77b4;font-size:.72rem}
+
 /* Chart */
 .chart-wrap{flex:1;overflow:hidden;display:flex;flex-direction:column;padding:.35rem}
 #chart{width:100%;flex:1}
@@ -166,7 +172,7 @@ footer{font-size:.68rem;color:#aaa;text-align:center;padding:.35rem;
 <header>
   <h1>%%TITLE%%</h1>
   <span class="sub">%%SUBTITLE%%</span>
-  <a class="back" href="index.html">&larr; ECON 10</a>
+  <a class="back" href="../index.html">&larr; All Charts</a>
 </header>
 
 <div class="toolbar">
@@ -191,6 +197,10 @@ footer{font-size:.68rem;color:#aaa;text-align:center;padding:.35rem;
 %%CHECKBOXES%%
     </div>
 %%EXTRA_CTRL%%
+    <div class="src-section">
+      <div class="ctrl-hd">Data Source</div>
+%%SOURCE_HTML%%
+    </div>
   </aside>
 
   <div class="chart-wrap">
@@ -232,10 +242,7 @@ def base_layout(**kwargs):
         plot_bgcolor="#fff",
         paper_bgcolor="#fff",
         hovermode="closest",
-        legend=dict(
-            orientation="h", yanchor="bottom", y=1.01,
-            xanchor="left", x=0, font=dict(size=10),
-        ),
+        showlegend=False,
         font=dict(family=FONT_FAMILY, size=12),
     )
     defaults.update(kwargs)
@@ -264,7 +271,34 @@ function filterSearch(q) {
 
 
 # -- Line chart ---------------------------------------------------------------
-def build_line_chart(csv_name: str, title: str, y_label: str, html_name: str):
+SOURCE_INFLATION = """\
+      <p>World Bank Open Data<br>
+      Indicator: <code>FP.CPI.TOTL.ZG</code><br>
+      Inflation, consumer prices (annual&nbsp;%)<br>
+      Coverage: 175 countries, 1960&ndash;2024</p>
+      <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG"
+         target="_blank">View on World Bank &rarr;</a>"""
+
+SOURCE_UNEMPLOYMENT = """\
+      <p>World Bank Open Data<br>
+      Indicator: <code>SL.UEM.TOTL.ZS</code><br>
+      Unemployment, total (% of labor force,<br>ILO modeled estimate)<br>
+      Coverage: 141 countries, 1991&ndash;2024<br>
+      <em>ILO estimates begin 1991; no earlier<br>global data available.</em></p>
+      <a href="https://data.worldbank.org/indicator/SL.UEM.TOTL.ZS"
+         target="_blank">View on World Bank &rarr;</a>"""
+
+SOURCE_PHILLIPS = """\
+      <p>World Bank Open Data<br>
+      Unemployment: <code>SL.UEM.TOTL.ZS</code><br>
+      Inflation: <code>FP.CPI.TOTL.ZG</code><br>
+      Coverage: 1991&ndash;2024 (ILO estimates)</p>
+      <a href="https://data.worldbank.org"
+         target="_blank">View on World Bank &rarr;</a>"""
+
+
+def build_line_chart(csv_name: str, title: str, y_label: str, html_name: str,
+                     source_html: str = ""):
     csv_path = DATA_DIR / csv_name
     if not csv_path.exists():
         sys.exit(f"ERROR: {csv_path} not found. Run collect_data_wb.py first.")
@@ -286,7 +320,8 @@ def build_line_chart(csv_name: str, title: str, y_label: str, html_name: str):
             name=country,
             mode="lines+markers",
             visible=True if country == US_NAME else "legendonly",
-            line=dict(color=cmap[country], width=2),
+            showlegend=False,
+            line=dict(color=cmap[country], width=2.5),
             marker=dict(size=5),
             hovertemplate=(
                 f"<b>{country}</b><br>Year: %{{x}}<br>"
@@ -332,12 +367,13 @@ document.querySelectorAll('.ccb').forEach(function(c){
 """
 
     html = (PAGE_TEMPLATE
-            .replace("%%TITLE%%",    title)
-            .replace("%%SUBTITLE%%", f"{y_label} | World Bank")
+            .replace("%%TITLE%%",      title)
+            .replace("%%SUBTITLE%%",   f"{y_label} | World Bank")
             .replace("%%CHECKBOXES%%", cbs)
             .replace("%%EXTRA_CTRL%%", "")
-            .replace("%%CHART_JS%%",  chart_js)
-            .replace("%%CTRL_JS%%",   ctrl_js))
+            .replace("%%SOURCE_HTML%%", source_html)
+            .replace("%%CHART_JS%%",   chart_js)
+            .replace("%%CTRL_JS%%",    ctrl_js))
 
     out = DOCS_DIR / html_name
     out.write_text(html, encoding="utf-8")
@@ -397,6 +433,7 @@ def build_phillips_chart():
             mode="markers",
             text=texts,
             visible=True if country == US_NAME else "legendonly",
+            showlegend=False,
             hovertemplate="%{text}<extra></extra>",
             marker=dict(color=cmap[country], size=7,
                         line=dict(color="white", width=0.5)),
@@ -426,6 +463,9 @@ def build_phillips_chart():
         shapes=[dict(type="line", x0=0, x1=1, xref="paper",
                      y0=0, y1=0, yref="y",
                      line=dict(color="#ccc", width=1, dash="dot"))],
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=1.01,
+                    xanchor="left", x=0, font=dict(size=10)),
     ))
 
     extra_ctrl = f"""\
@@ -599,6 +639,7 @@ document.getElementById('showTrend').addEventListener('change', function() {
             .replace("%%SUBTITLE%%",   "Phillips Curve | World Bank")
             .replace("%%CHECKBOXES%%", cbs)
             .replace("%%EXTRA_CTRL%%", extra_ctrl)
+            .replace("%%SOURCE_HTML%%", SOURCE_PHILLIPS)
             .replace("%%CHART_JS%%",   chart_js)
             .replace("%%CTRL_JS%%",    ctrl_js))
 
@@ -619,6 +660,7 @@ def main():
         "Inflation Rate",
         "Inflation Rate (%)",
         "chart_inflation.html",
+        source_html=SOURCE_INFLATION,
     )
 
     print("\n[2/3] Unemployment rate -- line chart")
@@ -627,6 +669,7 @@ def main():
         "Unemployment Rate",
         "Unemployment Rate (%)",
         "chart_unemployment.html",
+        source_html=SOURCE_UNEMPLOYMENT,
     )
 
     print("\n[3/3] Phillips curve -- scatter with trend")

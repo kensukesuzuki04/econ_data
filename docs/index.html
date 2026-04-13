@@ -5,18 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Economics Visualizations | Kensuke Suzuki</title>
   <style>
-    /* ── Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Georgia', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       background: #fafaf8;
       color: #1a1a1a;
       line-height: 1.65;
     }
 
-    /* ── Header ── */
     header {
-      background: #8b0000;          /* Clark University crimson */
+      background: #8b0000;
       color: #fff;
       padding: 2.5rem 2rem 2rem;
       border-bottom: 4px solid #5a0000;
@@ -34,7 +32,6 @@
     }
     nav {
       margin-top: 1.1rem;
-      font-family: 'Arial', sans-serif;
       font-size: 0.88rem;
     }
     nav a {
@@ -44,16 +41,13 @@
     }
     nav a:hover { text-decoration: underline; color: #fff; }
 
-    /* ── Main layout ── */
     main {
       max-width: 860px;
       margin: 3rem auto;
       padding: 0 1.5rem;
     }
 
-    /* ── Section heading ── */
     .section-title {
-      font-family: 'Arial', sans-serif;
       font-size: 0.78rem;
       font-weight: bold;
       letter-spacing: 0.12em;
@@ -64,10 +58,7 @@
       margin-bottom: 1.4rem;
     }
 
-    /* ── Course block ── */
-    .course-block {
-      margin-bottom: 3.2rem;
-    }
+    .course-block { margin-bottom: 3.2rem; }
     .course-header {
       display: flex;
       align-items: baseline;
@@ -75,7 +66,6 @@
       margin-bottom: 1rem;
     }
     .course-code {
-      font-family: 'Arial', sans-serif;
       font-size: 1.1rem;
       font-weight: bold;
       color: #8b0000;
@@ -86,7 +76,6 @@
       font-style: italic;
     }
 
-    /* ── Chart grid ── */
     .chart-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -101,6 +90,7 @@
       color: inherit;
       transition: box-shadow 0.15s, border-color 0.15s;
       display: block;
+      position: relative;
     }
     .chart-card:hover {
       border-color: #8b0000;
@@ -108,27 +98,41 @@
     }
     .chart-card h3 {
       font-size: 0.95rem;
-      font-family: 'Arial', sans-serif;
       color: #1a1a1a;
       margin-bottom: 0.3rem;
     }
-    .chart-card p {
+    .chart-card p.desc {
       font-size: 0.82rem;
       color: #666;
       line-height: 1.45;
     }
-    .chart-card .tag {
+    .chart-card .tags {
+      margin-top: 0.55rem;
+    }
+    .tag {
       display: inline-block;
-      margin-top: 0.6rem;
       font-size: 0.72rem;
-      font-family: 'Arial', sans-serif;
       background: #f5eded;
       color: #8b0000;
       padding: 0.15rem 0.5rem;
       border-radius: 3px;
+      margin-right: 0.25rem;
+    }
+    .chart-card .src {
+      margin-top: 0.65rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid #f0f0f0;
+      font-size: 0.74rem;
+      color: #777;
+      line-height: 1.5;
+    }
+    .chart-card .src code {
+      font-size: 0.72rem;
+      background: #f5f5f5;
+      padding: 0.05rem 0.3rem;
+      border-radius: 2px;
     }
 
-    /* ── Empty state ── */
     .empty {
       font-size: 0.88rem;
       color: #999;
@@ -136,12 +140,10 @@
       padding: 0.6rem 0;
     }
 
-    /* ── Footer ── */
     footer {
       text-align: center;
       font-size: 0.8rem;
       color: #aaa;
-      font-family: 'Arial', sans-serif;
       padding: 2.5rem 1rem 3rem;
       border-top: 1px solid #e8e8e8;
       margin-top: 2rem;
@@ -152,7 +154,7 @@
 
 <header>
   <h1><a href="index.html" style="color:inherit;text-decoration:none;">Economics Data Visualizations</a></h1>
-  <p>Kensuke Suzuki &nbsp;·&nbsp; Department of Economics &nbsp;·&nbsp; Clark University</p>
+  <p>Kensuke Suzuki &nbsp;&middot;&nbsp; Department of Economics &nbsp;&middot;&nbsp; Clark University</p>
   <nav>
     <a href="https://github.com/kensukesuzuki04/econ_data" target="_blank">GitHub</a>
   </nav>
@@ -162,42 +164,60 @@
 
   <p class="section-title">Undergraduate Courses</p>
 
-  <!-- ── ECON 10 ── -->
+  <!-- ECON 10 -->
   <div class="course-block" id="econ10">
     <div class="course-header">
       <span class="course-code">ECON 10</span>
       <span class="course-title">Introductory Economics</span>
     </div>
-    <div class="chart-grid" id="grid-econ10">
+    <div class="chart-grid">
 
       <a class="chart-card" href="econ10/chart_inflation.html">
         <h3>Inflation Rate</h3>
-        <p>Annual CPI inflation for selected countries, 1990–2023. Toggle countries; zoom with the range slider.</p>
-        <span class="tag">Line chart</span><span class="tag">World Bank</span>
+        <p class="desc">Annual CPI inflation for 175 countries, 1960&ndash;2024. Toggle countries, hover for values.</p>
+        <div class="tags">
+          <span class="tag">Line chart</span>
+          <span class="tag">World Bank</span>
+        </div>
+        <div class="src">
+          <code>FP.CPI.TOTL.ZG</code> &mdash; Inflation, consumer prices (annual&nbsp;%)
+        </div>
       </a>
 
       <a class="chart-card" href="econ10/chart_unemployment.html">
         <h3>Unemployment Rate</h3>
-        <p>ILO-estimate unemployment for selected countries, 1990–2023. Toggle countries; zoom with the range slider.</p>
-        <span class="tag">Line chart</span><span class="tag">World Bank</span>
+        <p class="desc">ILO-modeled unemployment for 141 countries, 1991&ndash;2024. Toggle countries, hover for values.</p>
+        <div class="tags">
+          <span class="tag">Line chart</span>
+          <span class="tag">World Bank</span>
+        </div>
+        <div class="src">
+          <code>SL.UEM.TOTL.ZS</code> &mdash; Unemployment, total (% of labor force, ILO estimate)
+        </div>
       </a>
 
       <a class="chart-card" href="econ10/chart_phillips.html">
         <h3>Unemployment vs. Inflation</h3>
-        <p>Phillips curve scatter: each dot is one country-year. Filter by country and year range.</p>
-        <span class="tag">Scatter</span><span class="tag">World Bank</span>
+        <p class="desc">Phillips curve scatter: each dot is one country-year, 1991&ndash;2024. Filter by country and year; 2nd-degree polynomial trend.</p>
+        <div class="tags">
+          <span class="tag">Scatter</span>
+          <span class="tag">World Bank</span>
+        </div>
+        <div class="src">
+          <code>SL.UEM.TOTL.ZS</code> &times; <code>FP.CPI.TOTL.ZG</code>
+        </div>
       </a>
 
     </div>
   </div>
 
-  <!-- ── ECON 206 ── -->
+  <!-- ECON 206 -->
   <div class="course-block" id="econ206">
     <div class="course-header">
       <span class="course-code">ECON 206</span>
       <span class="course-title">Intermediate Macroeconomics</span>
     </div>
-    <div class="chart-grid" id="grid-econ206">
+    <div class="chart-grid">
       <p class="empty">Visualizations coming soon.</p>
     </div>
   </div>
