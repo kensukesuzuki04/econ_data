@@ -180,7 +180,7 @@
           <span class="tag">World Bank</span>
         </div>
         <div class="src">
-          <code>FP.CPI.TOTL.ZG</code> &mdash; Inflation, consumer prices (annual&nbsp;%)
+          <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG" target="_blank" onclick="event.stopPropagation()"><code>FP.CPI.TOTL.ZG</code></a> &mdash; Inflation, consumer prices (annual&nbsp;%)
         </div>
       </a>
 
@@ -192,19 +192,46 @@
           <span class="tag">World Bank</span>
         </div>
         <div class="src">
-          <code>SL.UEM.TOTL.ZS</code> &mdash; Unemployment, total (% of labor force, ILO estimate)
+          <a href="https://data.worldbank.org/indicator/SL.UEM.TOTL.ZS" target="_blank" onclick="event.stopPropagation()"><code>SL.UEM.TOTL.ZS</code></a> &mdash; Unemployment, total (% of labor force, ILO estimate)
         </div>
       </a>
 
-      <a class="chart-card" href="econ10/chart_phillips.html">
-        <h3>Unemployment vs. Inflation</h3>
-        <p class="desc">Phillips curve scatter: each dot is one country-year, 1991&ndash;2024. Filter by country and year; 2nd-degree polynomial trend.</p>
+      <a class="chart-card" href="econ10/chart_phillips_wb.html">
+        <h3>Phillips Curve &mdash; World Bank</h3>
+        <p class="desc">Phillips curve scatter for 175 countries, 1991&ndash;2024. Filter by country and year; 2nd-degree polynomial trend.</p>
         <div class="tags">
           <span class="tag">Scatter</span>
           <span class="tag">World Bank</span>
         </div>
         <div class="src">
-          <code>SL.UEM.TOTL.ZS</code> &times; <code>FP.CPI.TOTL.ZG</code>
+          <a href="https://data.worldbank.org/indicator/SL.UEM.TOTL.ZS" target="_blank" onclick="event.stopPropagation()"><code>SL.UEM.TOTL.ZS</code></a> &times;
+          <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG" target="_blank" onclick="event.stopPropagation()"><code>FP.CPI.TOTL.ZG</code></a>
+        </div>
+      </a>
+
+      <a class="chart-card" href="econ10/chart_phillips_us.html">
+        <h3>Phillips Curve &mdash; United States</h3>
+        <p class="desc">US Phillips curve, 1948&ndash;present, colored by decade. Uses FRED unemployment and CPI data for longer historical coverage.</p>
+        <div class="tags">
+          <span class="tag">Scatter</span>
+          <span class="tag">FRED</span>
+        </div>
+        <div class="src">
+          <a href="https://fred.stlouisfed.org/series/UNRATE" target="_blank" onclick="event.stopPropagation()"><code>UNRATE</code></a> &times;
+          <a href="https://fred.stlouisfed.org/series/CPIAUCSL" target="_blank" onclick="event.stopPropagation()"><code>CPIAUCSL</code></a> &mdash; Federal Reserve Bank of St.&nbsp;Louis
+        </div>
+      </a>
+
+      <a class="chart-card" href="econ10/chart_phillips_oecd.html">
+        <h3>Phillips Curve &mdash; OECD</h3>
+        <p class="desc">Phillips curve for 32 OECD members, 1960&ndash;2024. Uses OECD harmonized unemployment rates for cross-country comparability.</p>
+        <div class="tags">
+          <span class="tag">Scatter</span>
+          <span class="tag">OECD / FRED</span>
+        </div>
+        <div class="src">
+          <a href="https://fred.stlouisfed.org/series/LRHUTTTTUSM156S" target="_blank" onclick="event.stopPropagation()"><code>LRHUTTTT{ISO2}M156S</code></a> (FRED/OECD) &times;
+          <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG" target="_blank" onclick="event.stopPropagation()"><code>FP.CPI.TOTL.ZG</code></a>
         </div>
       </a>
 
