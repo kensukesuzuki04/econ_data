@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+env/
+.env
+
+# Data files that should not be committed
+data/**/*.xlsx
+data/**/*.dta
+data/**/*.zip
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
