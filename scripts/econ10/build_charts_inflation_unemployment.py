@@ -204,7 +204,7 @@ footer{font-size:.68rem;color:#aaa;text-align:center;padding:.35rem;
 </div>
 <footer>
   Source: %%FOOTER_SOURCE%% &nbsp;|&nbsp;
-  ECON 10 &ndash; Introductory Economics &nbsp;|&nbsp;
+  ECON 10 &ndash; Economics and the World Economy &nbsp;|&nbsp;
   &copy; 2026 Kensuke Suzuki, Clark University
 </footer>
 <script>
