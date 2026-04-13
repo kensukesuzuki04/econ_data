@@ -49,7 +49,7 @@ PALETTE = [
     "#edc948","#b07aa1","#ff9da7","#9c755f","#bab0ac",
 ]
 
-FONT_FAMILY = "Georgia, 'Times New Roman', serif"
+FONT_FAMILY = "'Helvetica Neue', Helvetica, Arial, sans-serif"
 
 DECADE_COLORS = {
     "1940s": "#aec7e8", "1950s": "#1f77b4", "1960s": "#2ca02c",
@@ -108,7 +108,7 @@ PAGE_TEMPLATE = """\
 <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Georgia,'Times New Roman',serif;
+body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
      background:#fafaf8;color:#1a1a1a;height:100vh;
      display:flex;flex-direction:column;overflow:hidden}
 header{background:#8b0000;color:#fff;padding:.75rem 1.2rem;
@@ -374,6 +374,10 @@ def _phillips_extra_ctrl(ymin, ymax):
         f'        <input type="checkbox" id="showTrend" checked>\n'
         f'        <label for="showTrend">Show fitted line</label>\n'
         f'      </div>\n'
+        f'      <div class="trend-row">\n'
+        f'        <input type="checkbox" id="showLabels">\n'
+        f'        <label for="showLabels">Show year labels</label>\n'
+        f'      </div>\n'
         f'    </div>'
     )
 
@@ -439,6 +443,10 @@ _PJS = [
     "var d=ALL_DATA[c.value];if(!d)return;",
     "d.years.forEach(function(yr,j){if(yr>=y0&&yr<=y1){ax.push(d.x[j]);ay.push(d.y[j]);}});});",
     "updateTrend(ax,ay);});",
+    "document.getElementById('showLabels').addEventListener('change',function(){",
+    "var show=this.checked;",
+    "var idxs=TRACE_NAMES.map(function(_,i){return i;});",
+    "Plotly.restyle('chart',{mode:show?'markers+text':'markers'},idxs);});",
 ]
 PHILLIPS_JS = "\n".join(_PJS)
 
@@ -468,10 +476,10 @@ def _build_phillips_multi(merged, title, subtitle, html_name,
                  for yr, u, v in zip(years, xs, ys)]
         all_data[country] = {"x": xs, "y": ys, "years": years, "text": texts}
         fig.add_trace(go.Scatter(
-            x=xs, y=ys, name=country, mode="markers+text",
+            x=xs, y=ys, name=country, mode="markers",
             text=[str(yr) for yr in years],
             textposition="top center",
-            textfont=dict(size=7, color=cmap[country]),
+            textfont=dict(size=10, color=cmap[country]),
             customdata=texts,
             visible=True if country == default_country else "legendonly",
             showlegend=False,
@@ -575,10 +583,10 @@ def build_phillips_us_chart():
         all_data[decade] = {"x": xs, "y": ys, "years": years, "text": texts}
         color = DECADE_COLORS.get(decade, "#888")
         fig.add_trace(go.Scatter(
-            x=xs, y=ys, name=decade, mode="markers+text",
+            x=xs, y=ys, name=decade, mode="markers",
             text=[str(yr) for yr in years],
             textposition="top center",
-            textfont=dict(size=8, color=color),
+            textfont=dict(size=10, color=color),
             customdata=texts,
             visible=True, showlegend=True,
             hovertemplate="%{customdata}<extra></extra>",
