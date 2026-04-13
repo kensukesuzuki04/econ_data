@@ -8,6 +8,7 @@ env/
 
 # Data files that should not be committed
 data/**/*.xlsx
+data/**/*.xls
 data/**/*.dta
 data/**/*.zip
 

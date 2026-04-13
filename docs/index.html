@@ -242,6 +242,21 @@
         </div>
       </div>
 
+      <div class="chart-card" onclick="window.location='econ10/chart_phillips_us_historical.html'">
+        <h3>Phillips Curve &mdash; US Long Run (1890&ndash;present)</h3>
+        <p class="desc">Full historical US Phillips curve colored by decade. Pre-1948 uses Lebergott (1964) unemployment estimates and Shiller CPI; post-1947 uses official FRED data.</p>
+        <div class="tags">
+          <span class="tag">Scatter</span>
+          <span class="tag">Historical</span>
+          <span class="tag">FRED / Shiller</span>
+        </div>
+        <div class="src">
+          Lebergott (1964) &times; Shiller/Yale CPI &mdash; pre-1948<br>
+          <a href="https://fred.stlouisfed.org/series/UNRATE" target="_blank" onclick="event.stopPropagation()"><code>UNRATE</code></a> &times;
+          <a href="https://fred.stlouisfed.org/series/CPIAUCSL" target="_blank" onclick="event.stopPropagation()"><code>CPIAUCSL</code></a> &mdash; post-1947
+        </div>
+      </div>
+
     </div>
   </div>
 

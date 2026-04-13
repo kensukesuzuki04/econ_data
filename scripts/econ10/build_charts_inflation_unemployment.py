@@ -52,6 +52,8 @@ PALETTE = [
 FONT_FAMILY = "Helvetica Neue, Helvetica, Arial, sans-serif"
 
 DECADE_COLORS = {
+    "1890s": "#c7c7c7", "1900s": "#969696", "1910s": "#636363",
+    "1920s": "#fdae6b", "1930s": "#e6550d",
     "1940s": "#aec7e8", "1950s": "#1f77b4", "1960s": "#2ca02c",
     "1970s": "#ff7f0e", "1980s": "#d62728", "1990s": "#9467bd",
     "2000s": "#8c564b", "2010s": "#17becf", "2020s": "#e377c2",
@@ -268,6 +270,20 @@ SOURCE_PHILLIPS_US = """\
       Inflation: from <code>CPIAUCSL</code> (CPI all<br>
       &nbsp;&nbsp;urban consumers, annual YoY&nbsp;%)<br>
       Coverage: United States, 1948&ndash;present</p>
+      <a href="https://fred.stlouisfed.org/series/UNRATE"
+         target="_blank">UNRATE on FRED &rarr;</a>"""
+
+SOURCE_PHILLIPS_US_HIST = """\
+      <p><b>Pre-1948 (estimates)</b><br>
+      Unemployment: Lebergott (1964),<br>
+      &nbsp;&nbsp;Manpower in Economic Growth,<br>
+      &nbsp;&nbsp;Table A-3. Annual.<br>
+      CPI: Robert Shiller / Yale<br>
+      &nbsp;&nbsp;ie_data.xls, annual avg YoY&nbsp;%<br>
+      <em>Note: Romer (1986) offers alternative<br>
+      unemployment estimates (generally lower).</em></p>
+      <p style="margin-top:.5rem"><b>Post-1947 (official)</b><br>
+      FRED <code>UNRATE</code> &times; <code>CPIAUCSL</code></p>
       <a href="https://fred.stlouisfed.org/series/UNRATE"
          target="_blank">UNRATE on FRED &rarr;</a>"""
 
@@ -665,34 +681,142 @@ def build_phillips_oecd_chart():
     )
 
 
+# -- 4. Phillips US historical: Lebergott + Shiller + FRED, 1890+ ------------
+def build_phillips_us_historical_chart():
+    csv_path = DATA_DIR / "phillips_us_historical.csv"
+    if not csv_path.exists():
+        sys.exit(f"ERROR: {csv_path} not found. Run collect_data_historical_us.py first.")
+    df = pd.read_csv(csv_path).dropna(subset=["unemployment", "inflation"])
+
+    fig     = go.Figure()
+    plotted = []
+    all_data = {}
+
+    decades = sorted({f"{(yr // 10) * 10}s" for yr in df["year"]})
+    for decade in decades:
+        d0  = int(decade[:-1])
+        sub = df[(df["year"] >= d0) & (df["year"] < d0 + 10)].sort_values("year")
+        if sub.empty:
+            continue
+        plotted.append(decade)
+        xs    = sub["unemployment"].round(2).tolist()
+        ys    = sub["inflation"].round(2).tolist()
+        years = sub["year"].tolist()
+        eras  = sub["era"].tolist()
+        texts = [
+            f"<b>United States, {yr}</b><br>"
+            f"Unemployment: {u:.1f}%<br>Inflation: {v:.1f}%"
+            + ("&nbsp;&nbsp;<i>(est.)</i>" if e == "estimate" else "")
+            for yr, u, v, e in zip(years, xs, ys, eras)
+        ]
+        all_data[decade] = {"x": xs, "y": ys, "years": years, "text": texts}
+        color  = DECADE_COLORS.get(decade, "#888")
+        # open markers for estimates, filled for official
+        is_est = all(e == "estimate" for e in eras)
+        symbol = "circle-open" if is_est else "circle"
+        fig.add_trace(go.Scatter(
+            x=xs, y=ys, name=decade, mode="markers",
+            text=[str(yr) for yr in years],
+            textposition="top center",
+            textfont=dict(size=12, color=color),
+            customdata=texts,
+            visible=True, showlegend=True,
+            hovertemplate="%{customdata}<extra></extra>",
+            marker=dict(color=color, size=11, symbol=symbol,
+                        line=dict(color=color, width=2)),
+        ))
+
+    all_xs = df["unemployment"].round(2).tolist()
+    all_ys = df["inflation"].round(2).tolist()
+    _, x_fit, y_fit = poly2_fit(all_xs, all_ys)
+    TREND_IDX = len(plotted)
+    fig.add_trace(go.Scatter(
+        x=x_fit or [], y=y_fit or [], name="Fitted Line (2nd order polynomial)",
+        mode="lines", line=dict(color="#333", width=2, dash="dash"),
+        hoverinfo="skip", showlegend=True, visible=True,
+    ))
+
+    ymin = int(df["year"].min())
+    ymax = int(df["year"].max())
+    fig.update_layout(base_layout(
+        xaxis=dict(title="Unemployment Rate (%)", gridcolor="#f0f0f0", zeroline=False),
+        yaxis=dict(title="Inflation Rate (%, CPI)", gridcolor="#f0f0f0",
+                   zeroline=True, zerolinecolor="#ddd", zerolinewidth=1),
+        shapes=[dict(type="line", x0=0, x1=1, xref="paper",
+                     y0=0, y1=0, yref="y",
+                     line=dict(color="#ccc", width=1, dash="dot"))],
+        showlegend=True,
+        legend=dict(orientation="v", yanchor="top", y=1, xanchor="right", x=1,
+                    font=dict(size=10), bgcolor="rgba(255,255,255,0.85)",
+                    bordercolor="#ddd", borderwidth=1),
+    ))
+
+    # Decade checkboxes — open-circle label for pre-1948 decades
+    PRE1948 = {"1890s", "1900s", "1910s", "1920s", "1930s", "1940s"}
+    decade_cbs = "\n".join(
+        f'      <div class="cb-wrap" data-name="{d.lower()}">'
+        f'<input type="checkbox" class="ccb" id="cb_{d}" value="{d}" checked>'
+        f'<label for="cb_{d}" style="color:{DECADE_COLORS.get(d,"#888")};font-weight:600">'
+        f'{d}{"&nbsp;<em style=\'font-weight:400;font-size:.7rem\'>(est.)</em>" if d in PRE1948 else ""}'
+        f'</label></div>'
+        for d in plotted
+    )
+    fname    = "chart_phillips_us_historical"
+    chart_js = (
+        f"var fig={fig.to_json()};\n"
+        f"Plotly.newPlot('chart',fig.data,fig.layout,{{responsive:true}});\n"
+        f"var TRACE_NAMES={json.dumps(plotted)};\n"
+        f"var TREND_IDX={TREND_IDX};\n"
+        f"var ALL_DATA={json.dumps(all_data)};\n"
+        + EXPORT_JS.replace("%%FNAME%%", fname)
+        + SEARCH_JS
+    )
+    html = (PAGE_TEMPLATE
+            .replace("%%TITLE%%",        "Phillips Curve — US Historical (1890–present)")
+            .replace("%%SUBTITLE%%",     "Lebergott (1964) + Shiller CPI pre-1948 | FRED post-1947")
+            .replace("%%SIDEBAR_LABEL%%","Decades")
+            .replace("%%CHECKBOXES%%",   decade_cbs)
+            .replace("%%EXTRA_CTRL%%",   _phillips_extra_ctrl(ymin, ymax))
+            .replace("%%SOURCE_HTML%%",  SOURCE_PHILLIPS_US_HIST)
+            .replace("%%FOOTER_SOURCE%%",
+                     "Lebergott (1964); Shiller/Yale CPI; FRED UNRATE + CPIAUCSL")
+            .replace("%%CHART_JS%%",     chart_js)
+            .replace("%%CTRL_JS%%",      PHILLIPS_JS))
+    (DOCS_DIR / "chart_phillips_us_historical.html").write_text(html, encoding="utf-8")
+    print(f"  Saved -> {(DOCS_DIR / 'chart_phillips_us_historical.html').relative_to(REPO_ROOT)}")
+
+
 # -- Main ---------------------------------------------------------------------
 def main():
     print("=" * 55)
     print("ECON 10 - Building inflation & unemployment charts")
     print("=" * 55)
 
-    print("\n[1/5] Inflation rate -- line chart")
+    print("\n[1/6] Inflation rate -- line chart")
     build_line_chart(
         "inflation_wb.csv", "Inflation Rate",
         "Inflation Rate (%)", "chart_inflation.html",
         source_html=SOURCE_INFLATION,
     )
 
-    print("\n[2/5] Unemployment rate -- line chart")
+    print("\n[2/6] Unemployment rate -- line chart")
     build_line_chart(
         "unemployment_wb.csv", "Unemployment Rate",
         "Unemployment Rate (%)", "chart_unemployment.html",
         source_html=SOURCE_UNEMPLOYMENT,
     )
 
-    print("\n[3/5] Phillips curve -- World Bank, all countries")
+    print("\n[3/6] Phillips curve -- World Bank, all countries")
     build_phillips_wb_chart()
 
-    print("\n[4/5] Phillips curve -- United States (FRED, 1948+)")
+    print("\n[4/6] Phillips curve -- United States (FRED, 1948+)")
     build_phillips_us_chart()
 
-    print("\n[5/5] Phillips curve -- OECD (FRED harmonized, 1960+)")
+    print("\n[5/6] Phillips curve -- OECD (FRED harmonized, 1960+)")
     build_phillips_oecd_chart()
+
+    print("\n[6/6] Phillips curve -- US historical (1890+, Lebergott + Shiller)")
+    build_phillips_us_historical_chart()
 
     print("\nAll charts saved to docs/econ10/")
 
