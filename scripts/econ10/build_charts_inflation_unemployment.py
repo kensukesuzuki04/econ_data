@@ -60,6 +60,12 @@ DECADE_COLORS = {
 }
 
 # -- Helpers ------------------------------------------------------------------
+def hex_to_rgba(hex_color: str, alpha: float = 0.35) -> str:
+    h = hex_color.lstrip("#")
+    r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+    return f"rgba({r},{g},{b},{alpha})"
+
+
 def load_countries(csv_path: Path) -> list:
     df = pd.read_csv(csv_path)
     names = sorted(df["country"].unique().tolist())
@@ -394,11 +400,15 @@ def _phillips_extra_ctrl(ymin, ymax):
         f'        <input type="checkbox" id="showLabels">\n'
         f'        <label for="showLabels">Show year labels</label>\n'
         f'      </div>\n'
+        f'      <div class="trend-row">\n'
+        f'        <input type="checkbox" id="showConn">\n'
+        f'        <label for="showConn">Connect by year</label>\n'
+        f'      </div>\n'
         f'    </div>'
     )
 
 
-# Shared Phillips JS (poly regression + year filter + trend + toggling)
+# Shared Phillips JS (poly regression + year filter + trend + label + connect toggling)
 _PJS = [
     "function polyfit2(xs,ys){",
     "var n=xs.length;if(n<5)return null;",
@@ -419,6 +429,18 @@ _PJS = [
     "var c=polyfit2(xs,ys);if(!c){Plotly.restyle('chart',{visible:false},[TREND_IDX]);return;}",
     "var lo=Math.min.apply(null,xs),hi=Math.max.apply(null,xs),xf=linspace(lo,hi,200);",
     "Plotly.restyle('chart',{x:[xf],y:[evalPoly(c,xf)],visible:true},[TREND_IDX]);}",
+    # helper: update line-connection traces after a filter/toggle
+    "function updateConnLines(showConn,y0,y1){",
+    "if(typeof LINE_IDXS==='undefined')return;",
+    "var lineUpd={x:[],y:[]},lineIdxArr=[];",
+    "TRACE_NAMES.forEach(function(nm){",
+    "var d=ALL_DATA[nm],xs=[],ys=[];",
+    "d.years.forEach(function(yr,j){if(yr>=y0&&yr<=y1){xs.push(d.x[j]);ys.push(d.y[j]);}});",
+    "lineUpd.x.push(xs);lineUpd.y.push(ys);lineIdxArr.push(LINE_IDXS[nm]);});",
+    "Plotly.restyle('chart',lineUpd,lineIdxArr);",
+    "TRACE_NAMES.forEach(function(nm){",
+    "var cb=document.querySelector('.ccb[value=\"'+nm+'\"]');",
+    "Plotly.restyle('chart',{visible:(showConn&&cb&&cb.checked)?true:false},[LINE_IDXS[nm]]);});}",
     "function applyFilter(){",
     "var y0=parseInt(document.getElementById('yrMin').value);",
     "var y1=parseInt(document.getElementById('yrMax').value);",
@@ -431,6 +453,8 @@ _PJS = [
     "var cb=document.querySelector('.ccb[value=\"'+nm+'\"]');",
     "if(cb&&cb.checked){axv=axv.concat(xs);ayv=ayv.concat(ys);}});",
     "Plotly.restyle('chart',upd,TRACE_NAMES.map(function(_,i){return i;}));",
+    "var showConn=document.getElementById('showConn')&&document.getElementById('showConn').checked;",
+    "updateConnLines(showConn,y0,y1);",
     "updateTrend(axv,ayv);",
     "TRACE_NAMES.forEach(function(nm,i){",
     "var cb=document.querySelector('.ccb[value=\"'+nm+'\"]');",
@@ -438,6 +462,9 @@ _PJS = [
     "function onCbChange(cb){",
     "var idx=TRACE_NAMES.indexOf(cb.value);if(idx<0)return;",
     "Plotly.restyle('chart',{visible:cb.checked?true:'legendonly'},[idx]);",
+    "if(typeof LINE_IDXS!=='undefined'){",
+    "var showConn=document.getElementById('showConn')&&document.getElementById('showConn').checked;",
+    "Plotly.restyle('chart',{visible:(cb.checked&&showConn)?true:false},[LINE_IDXS[cb.value]]);}",
     "var y0=parseInt(document.getElementById('yrMin').value);",
     "var y1=parseInt(document.getElementById('yrMax').value);",
     "var ax=[],ay=[];",
@@ -449,6 +476,8 @@ _PJS = [
     "function selNone(){",
     "document.querySelectorAll('.ccb').forEach(function(c){c.checked=false;});",
     "Plotly.restyle('chart',{visible:'legendonly'},TRACE_NAMES.map(function(_,i){return i;}));",
+    "if(typeof LINE_IDXS!=='undefined'){",
+    "Plotly.restyle('chart',{visible:false},Object.values(LINE_IDXS));}",
     "Plotly.restyle('chart',{visible:false},[TREND_IDX]);}",
     "document.querySelectorAll('.ccb').forEach(function(c){c.addEventListener('change',function(){onCbChange(c);});});",
     "document.getElementById('showTrend').addEventListener('change',function(){",
@@ -463,6 +492,11 @@ _PJS = [
     "var show=this.checked;",
     "var idxs=TRACE_NAMES.map(function(_,i){return i;});",
     "Plotly.restyle('chart',{mode:show?'markers+text':'markers'},idxs);});",
+    "document.getElementById('showConn').addEventListener('change',function(){",
+    "var show=this.checked;",
+    "var y0=parseInt(document.getElementById('yrMin').value);",
+    "var y1=parseInt(document.getElementById('yrMax').value);",
+    "updateConnLines(show,y0,y1);});",
 ]
 PHILLIPS_JS = "\n".join(_PJS)
 
@@ -504,9 +538,21 @@ def _build_phillips_multi(merged, title, subtitle, html_name,
                         line=dict(color="white", width=0.5)),
         ))
 
+    # -- connecting line traces (hidden by default, one per country) -----------
+    line_idxs = {}
+    for i, country in enumerate(plotted):
+        d = all_data[country]
+        line_idxs[country] = len(plotted) + i
+        fig.add_trace(go.Scatter(
+            x=d["x"], y=d["y"], name=country,
+            mode="lines",
+            line=dict(color=hex_to_rgba(cmap[country], 0.35), width=1.5),
+            showlegend=False, hoverinfo="skip", visible=False,
+        ))
+
     def_data = all_data.get(default_country, {})
     _, x_fit, y_fit = poly2_fit(def_data.get("x", []), def_data.get("y", []))
-    TREND_IDX = len(plotted)
+    TREND_IDX = len(plotted) * 2
     fig.add_trace(go.Scatter(
         x=x_fit or [], y=y_fit or [], name="Fitted Line (2nd order polynomial)",
         mode="lines", line=dict(color="#333", width=2, dash="dash"),
@@ -534,6 +580,7 @@ def _build_phillips_multi(merged, title, subtitle, html_name,
         f"Plotly.newPlot('chart',fig.data,fig.layout,{{responsive:true}});\n"
         f"var TRACE_NAMES={json.dumps(plotted)};\n"
         f"var TREND_IDX={TREND_IDX};\n"
+        f"var LINE_IDXS={json.dumps(line_idxs)};\n"
         f"var ALL_DATA={json.dumps(all_data)};\n"
         + EXPORT_JS.replace("%%FNAME%%", fname)
         + SEARCH_JS
@@ -609,10 +656,23 @@ def build_phillips_us_chart():
             marker=dict(color=color, size=11, line=dict(color="white", width=0.5)),
         ))
 
+    # -- connecting line traces -----------------------------------------------
+    line_idxs = {}
+    for i, decade in enumerate(plotted):
+        d = all_data[decade]
+        line_idxs[decade] = len(plotted) + i
+        color = DECADE_COLORS.get(decade, "#888")
+        fig.add_trace(go.Scatter(
+            x=d["x"], y=d["y"], name=decade,
+            mode="lines",
+            line=dict(color=hex_to_rgba(color, 0.35), width=1.5),
+            showlegend=False, hoverinfo="skip", visible=False,
+        ))
+
     all_xs = df["unemployment"].round(2).tolist()
     all_ys = df["inflation"].round(2).tolist()
     _, x_fit, y_fit = poly2_fit(all_xs, all_ys)
-    TREND_IDX = len(plotted)
+    TREND_IDX = len(plotted) * 2
     fig.add_trace(go.Scatter(
         x=x_fit or [], y=y_fit or [], name="Fitted Line (2nd order polynomial)",
         mode="lines", line=dict(color="#333", width=2, dash="dash"),
@@ -647,6 +707,7 @@ def build_phillips_us_chart():
         f"Plotly.newPlot('chart',fig.data,fig.layout,{{responsive:true}});\n"
         f"var TRACE_NAMES={json.dumps(plotted)};\n"
         f"var TREND_IDX={TREND_IDX};\n"
+        f"var LINE_IDXS={json.dumps(line_idxs)};\n"
         f"var ALL_DATA={json.dumps(all_data)};\n"
         + EXPORT_JS.replace("%%FNAME%%", fname)
         + SEARCH_JS
@@ -726,10 +787,23 @@ def build_phillips_us_historical_chart():
                         line=dict(color=color, width=2)),
         ))
 
+    # -- connecting line traces -----------------------------------------------
+    line_idxs = {}
+    for i, decade in enumerate(plotted):
+        d = all_data[decade]
+        line_idxs[decade] = len(plotted) + i
+        color = DECADE_COLORS.get(decade, "#888")
+        fig.add_trace(go.Scatter(
+            x=d["x"], y=d["y"], name=decade,
+            mode="lines",
+            line=dict(color=hex_to_rgba(color, 0.35), width=1.5),
+            showlegend=False, hoverinfo="skip", visible=False,
+        ))
+
     all_xs = df["unemployment"].round(2).tolist()
     all_ys = df["inflation"].round(2).tolist()
     _, x_fit, y_fit = poly2_fit(all_xs, all_ys)
-    TREND_IDX = len(plotted)
+    TREND_IDX = len(plotted) * 2
     fig.add_trace(go.Scatter(
         x=x_fit or [], y=y_fit or [], name="Fitted Line (2nd order polynomial)",
         mode="lines", line=dict(color="#333", width=2, dash="dash"),
@@ -767,6 +841,7 @@ def build_phillips_us_historical_chart():
         f"Plotly.newPlot('chart',fig.data,fig.layout,{{responsive:true}});\n"
         f"var TRACE_NAMES={json.dumps(plotted)};\n"
         f"var TREND_IDX={TREND_IDX};\n"
+        f"var LINE_IDXS={json.dumps(line_idxs)};\n"
         f"var ALL_DATA={json.dumps(all_data)};\n"
         + EXPORT_JS.replace("%%FNAME%%", fname)
         + SEARCH_JS
