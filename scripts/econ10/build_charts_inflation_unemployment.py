@@ -49,7 +49,7 @@ PALETTE = [
     "#edc948","#b07aa1","#ff9da7","#9c755f","#bab0ac",
 ]
 
-FONT_FAMILY = "'Helvetica Neue', Helvetica, Arial, sans-serif"
+FONT_FAMILY = "Helvetica Neue, Helvetica, Arial, sans-serif"
 
 DECADE_COLORS = {
     "1940s": "#aec7e8", "1950s": "#1f77b4", "1960s": "#2ca02c",
@@ -479,7 +479,7 @@ def _build_phillips_multi(merged, title, subtitle, html_name,
             x=xs, y=ys, name=country, mode="markers",
             text=[str(yr) for yr in years],
             textposition="top center",
-            textfont=dict(size=10, color=cmap[country]),
+            textfont=dict(size=12, color=cmap[country]),
             customdata=texts,
             visible=True if country == default_country else "legendonly",
             showlegend=False,
@@ -586,7 +586,7 @@ def build_phillips_us_chart():
             x=xs, y=ys, name=decade, mode="markers",
             text=[str(yr) for yr in years],
             textposition="top center",
-            textfont=dict(size=10, color=color),
+            textfont=dict(size=12, color=color),
             customdata=texts,
             visible=True, showlegend=True,
             hovertemplate="%{customdata}<extra></extra>",
