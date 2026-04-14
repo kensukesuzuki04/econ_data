@@ -243,7 +243,7 @@ def build_capital_wage_us():
         name="United States",
         text=[str(yr) for yr in years],
         textposition="top center",
-        textfont=dict(size=11, color=SINGLE_COLOR),
+        textfont=dict(size=13, color=SINGLE_COLOR),
         customdata=hover_texts,
         hovertemplate="%{customdata}<extra></extra>",
         showlegend=False,
