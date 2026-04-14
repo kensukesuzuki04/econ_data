@@ -18,3 +18,6 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Local PDF exports (not tracked in git)
+exports/
