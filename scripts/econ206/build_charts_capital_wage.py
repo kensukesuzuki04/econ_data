@@ -144,15 +144,26 @@ function updateTrend(xs,ys){
   var lo=Math.min.apply(null,xs),hi=Math.max.apply(null,xs),xf=linspace(lo,hi,200);
   Plotly.restyle('chart',{x:[xf],y:[evalPoly(c,xf)],visible:true},[TREND_IDX]);}
 
+function getLblInterval(){
+  var v=parseInt(document.getElementById('lblInterval').value);
+  return (isNaN(v)||v<1)?1:v;}
+
+function getDisplayText(ts,yrList,interval){
+  // Show label only for years divisible by interval (always show first and last)
+  var first=yrList[0],last=yrList[yrList.length-1];
+  return ts.map(function(t,i){
+    var yr=yrList[i];
+    return (yr===first||yr===last||yr%interval===0)?t:'';});}
+
 function getFiltered(){
   var y0=parseInt(document.getElementById('yrMin').value);
   var y1=parseInt(document.getElementById('yrMax').value);
-  var xs=[],ys=[],ts=[],hs=[];
+  var xs=[],ys=[],ts=[],hs=[],yrs=[];
   ALL_DATA.years.forEach(function(yr,j){
     if(yr>=y0&&yr<=y1){
       xs.push(ALL_DATA.x[j]);ys.push(ALL_DATA.y[j]);
-      ts.push(ALL_DATA.text[j]);hs.push(ALL_DATA.hoverText[j]);}});
-  return {xs:xs,ys:ys,ts:ts,hs:hs};}
+      ts.push(ALL_DATA.text[j]);hs.push(ALL_DATA.hoverText[j]);yrs.push(yr);}});
+  return {xs:xs,ys:ys,ts:ts,hs:hs,yrs:yrs};}
 
 function applyFilter(){
   var y0=parseInt(document.getElementById('yrMin').value);
@@ -160,7 +171,8 @@ function applyFilter(){
   if(y0>y1){alert('Min year must be \u2264 max year.');return;}
   var f=getFiltered();
   var showLbl=document.getElementById('showLabels').checked;
-  Plotly.restyle('chart',{x:[f.xs],y:[f.ys],text:[f.ts],customdata:[f.hs],
+  var dispText=showLbl?getDisplayText(f.ts,f.yrs,getLblInterval()):f.ts.map(function(){return '';});
+  Plotly.restyle('chart',{x:[f.xs],y:[f.ys],text:[dispText],customdata:[f.hs],
     mode:[showLbl?'markers+text':'markers']},[0]);
   var showConn=document.getElementById('showConn').checked;
   Plotly.restyle('chart',{x:[f.xs],y:[f.ys],visible:showConn},[LINE_IDX]);
@@ -168,7 +180,15 @@ function applyFilter(){
 
 document.getElementById('showLabels').addEventListener('change',function(){
   var show=this.checked;
-  Plotly.restyle('chart',{mode:[show?'markers+text':'markers']},[0]);});
+  if(!show){Plotly.restyle('chart',{mode:['markers'],text:[getFiltered().ts.map(function(){return '';})]},[0]);return;}
+  var f=getFiltered();
+  var dispText=getDisplayText(f.ts,f.yrs,getLblInterval());
+  Plotly.restyle('chart',{mode:['markers+text'],text:[dispText]},[0]);});
+
+document.getElementById('lblInterval').addEventListener('change',function(){
+  if(document.getElementById('showLabels').checked){
+    var f=getFiltered();
+    Plotly.restyle('chart',{text:[getDisplayText(f.ts,f.yrs,getLblInterval())]},[0]);}});
 
 document.getElementById('showTrend').addEventListener('change',function(){
   var f=getFiltered();updateTrend(f.xs,f.ys);});
@@ -223,7 +243,7 @@ def build_capital_wage_us():
         name="United States",
         text=[str(yr) for yr in years],
         textposition="top center",
-        textfont=dict(size=7, color=SINGLE_COLOR),
+        textfont=dict(size=11, color=SINGLE_COLOR),
         customdata=hover_texts,
         hovertemplate="%{customdata}<extra></extra>",
         showlegend=False,
@@ -296,6 +316,13 @@ def build_capital_wage_us():
       <div class="trend-row">
         <input type="checkbox" id="showLabels">
         <label for="showLabels">Show year labels</label>
+      </div>
+      <div class="trend-row" style="margin-top:.35rem;margin-left:1.35rem">
+        <label for="lblInterval" style="font-size:.74rem;color:#555">every</label>
+        <input type="number" id="lblInterval" value="10" min="1" max="100"
+          style="width:46px;font-size:.74rem;padding:.15rem .28rem;border:1px solid #ccc;
+                 border-radius:3px;text-align:center;font-family:inherit;margin:0 .25rem">
+        <label for="lblInterval" style="font-size:.74rem;color:#555">yr</label>
       </div>
       <div class="trend-row">
         <input type="checkbox" id="showConn">
